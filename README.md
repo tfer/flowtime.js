@@ -25,12 +25,6 @@ Say that a Topic has too many subtopics to cover on a single slide, how are we g
 
 ## Drawing to show a transition to two levels of Subtopics:
 
-
-## Drawing to show a transition to two levels of Subtopics:
-
-
-## Drawing to show a transition to two levels of Subtopics:
-
 ![Transition mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Transition_topic2sub.png "Transition to subtopics")
 
 
