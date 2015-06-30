@@ -27,10 +27,13 @@ Say that a Topic has too many subtopics to cover on a single slide, how are we g
 
 ![Transition mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Transition_topic2sub.png "Transition to subtopics")
 
+### In the above drawing,
+
+I'm showing how we might represent a transition to two more sublevels.  If this where a textbook that used dotted numbers to track each level, we would be at 1.3.1.2.2 in Part I.  Note that the tail .2.2 is shown in a kind of "drawer" pulled out of location 1.3.1 ...
 
 * * * *
 
-#### From here to the end is Marco's Lago github README.md file
+#### From here to the end is Marco Lago's github README.md file
 
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
 
