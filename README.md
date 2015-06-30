@@ -6,10 +6,13 @@ Parts, Chapters, Sections, Topic, ..., whatever.
 
 It's often said that the human mind has a hard time imagining more than 3 dimensions, but this is only true when the axises of those dimensions are infinite, it easily handles higher dimensions with finite axises.  Let me use a analogy to demonstrate this.  Consider a physical filing system, think of each 'grouping' change as bringing in another dimensions: pages - folder - file drawer - file cabinet - row of file cabinets - rows - room - another room(s) - floor - floor(s) - building ... and so on.  Dealing with multi-dimensional spaces requires that we place each added axis at 90 degrees to the already present ones, and it's had to imagine placing that fourth one, but dealing with multi-category spaces, we only need to a chunk of space to hold each added category and provide a means of navigating them, (going back to the analogy: taxis - elevators - doors - pulling out drawers - retrieving folders...).
 
-Flowtime has the 'overview-grid' that can be turned on to show you where you are in your presentation in terms of "Section/Page", as long as you don't have too many slides, you can see the entire layout.  This won't be possible with extra categories, while you can cram 3 category levels on a 2D guide, you have to illustrate transversing categories with some sort of "drill-in/zoom-out" animation.  Let me provide some drawing to show what this might look like:
+Flowtime has the 'overview-grid' that can be turned on to show you where you are in your presentation in terms of "Section/Page", as long as you don't have too many slides, you can see the entire layout.  This won't be possible with extra categories, while you can cram 3 category levels on a 2D guide, you have to illustrate transversing categories with some sort of "drill-in/zoom-out" animation.
 
+### Let me provide some drawings to show what this might look like:
 
 ![New grid mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Parts_Chp_Sec_pg.png "Overview mockup")
+
+In the above drawing, I'm showing 4 levels, Part - Chapter - Section - page, (or, perhaps ...- Section - Topic).  That might be too many for the overview, also, the text would not be part of the overview as it would be too small, its just on the drawing to show what the levels might be standing for.  Notice also that their is a suggestion that we might not be seeing all of Part II.  Even if I end up using some other format, I think I'm going to need the ability to show less than the whole overview at once. 
 ---
 #### From here to the end is Marco Lago github README.md file
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
