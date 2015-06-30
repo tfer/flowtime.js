@@ -8,6 +8,8 @@ It's often said that the human mind has a hard time imagining more than 3 dimens
 
 Flowtime has the 'overview-grid' that can be turned on to show you where you are in your presentation in terms of "Section/Page", as long as you don't have too many slides, you can see the entire layout.  This won't be possible with extra categories, while you can cram 3 category levels on a 2D guide, you have to illustrate transversing categories with some sort of "drill-in/zoom-out" animation.  Let me provide some drawing to show what this might look like:
 
+
+![New grid mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Parts_Chp_Sec_pg.png "Overview mockup")
 ---
 #### From here to the end is Marco Lago github README.md file
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
