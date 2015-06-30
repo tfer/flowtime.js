@@ -15,6 +15,7 @@ Flowtime has the 'overview-grid' that can be turned on to show you where you are
 ### In the above drawing,
 
 I'm showing 4 levels, Part - Chapter - Section - page, (or, perhaps ...- Section - Topic).  That might be too many for the overview, also, the text would not be part of the overview as it would be too small, its just on the drawing to show what the levels might be standing for.  Notice also that their is a suggestion that we might not be seeing all of Part II.  Even if I end up using some other format, I think I'm going to need the ability to show less than the whole overview at once. 
+
 ---
 #### From here to the end is Marco Lago github README.md file
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
