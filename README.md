@@ -23,6 +23,17 @@ I'm going to need the "drill-in/zoom-out" capability that I mentioned before, so
 
 Say that a Topic has too many subtopics to cover on a single slide, how are we going to show "turning a corner" and running into a fresh 'marker board' on which to array the subtopic?  I think this will need some animated transition to another 'Overview display', hopefully with a hint of where we came from.
 
+## Drawing to show a transition to two levels of Subtopics:
+
+
+## Drawing to show a transition to two levels of Subtopics:
+
+
+## Drawing to show a transition to two levels of Subtopics:
+
+![Transition mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Transition_topic2sub.png "Transition to subtopics")
+
+
 * * * *
 
 #### From here to the end is Marco's Lago github README.md file
