@@ -1,4 +1,4 @@
-![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
+![Flowtime.js](https://github.com/tfer/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
 ## Where I'm looking to go with this fork
 
@@ -19,11 +19,13 @@ I'm showing 4 levels, Part - Chapter - Section - page, (or, perhaps ...- Section
 
 ### Now, when we need to go further,
 
-I'm going to need the "drill-in/zoom-out" capability that I mentioned before, how to show that in the Overview?
+I'm going to need the "drill-in/zoom-out" capability that I mentioned before, so how to show that in the Overview?
 
 Say that a Topic has too many subtopics to cover on a single slide, how are we going to show "turning a corner" and running into a fresh 'marker board' on which to array the subtopic?  I think this will need some animated transition to another 'Overview display', hopefully with a hint of where we came from.
 
-#### From here to the end is Marco Lago github README.md file
+* * * *
+
+#### From here to the end is Marco's Lago github README.md file
 
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
 
