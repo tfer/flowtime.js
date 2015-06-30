@@ -21,7 +21,7 @@ I'm showing 4 levels, Part - Chapter - Section - page, (or, perhaps ...- Section
 
 I'm going to need the "drill-in/zoom-out" capability that I mentioned before, how to show that in the Overview?
 
-Say that a Topic has too many subtopics to cover on a single slide, how are we going to show "turning a corner" and running into and running into a fresh 'marker board' on which to array the subtopic?  I think this will need some animated transition to another 'Overview display', hopefully with a hint of where we came from.
+Say that a Topic has too many subtopics to cover on a single slide, how are we going to show "turning a corner" and running into a fresh 'marker board' on which to array the subtopic?  I think this will need some animated transition to another 'Overview display', hopefully with a hint of where we came from.
 
 #### From here to the end is Marco Lago github README.md file
 
