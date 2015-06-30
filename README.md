@@ -31,6 +31,8 @@ Say that a Topic has too many subtopics to cover on a single slide, how are we g
 
 I'm showing how we might represent a transition to two more sublevels.  If this where a textbook that used dotted numbers to track each level, we would be at 1.3.1.2.2 in Part I.  Note that the tail .2.2 is shown in a kind of "drawer" pulled out of location 1.3.1 ...
 
+Keyboard navigation to this spot would have been <down> <down> ... until we reached 1.3.1, then perhaps <enter> 4 <down>'s.
+
 * * * *
 
 #### From here to the end is Marco Lago's github README.md file
