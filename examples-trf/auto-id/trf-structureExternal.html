@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0 minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="marcolago">
+
+  <meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+  <title>Flowtime.js - Duplicated IDs Demo</title>
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../css/flowtime.css">
+  <link rel="stylesheet" href="../../css/themes/default.css">
+  <link rel="stylesheet" href="css/custom.css">
+
+  <style>
+    .titles {
+      text-align: justify;
+      padding: 0.5em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .titles:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .titles a {
+      color: white;
+    }
+
+  </style>
+
+</head>
+<body class="">
+  <main Id="presentation">
+
+  </main>
+  <!-- <iframe src="Presentation.html" seamless></iframe> -->
+  <!-- <section Id="content">
+
+  </section> -->
+  <!-- <OBJECT data="Presentation.html">
+
+  Warning: Presentation.html could not be included.
+  </OBJECT> -->
+
+
+  <script>
+    function load_Presentation(){
+          document.getElementById("presentation").innerHTML='<object type="text/html" data="Presentation.html" ></object>';
+        }
+    load_Presentation();
+  </script>
+
+  <script src="../../js/brav1toolbox.js"></script>
+  <script src="../../js/flowtime.js"></script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1228618-10']);
+    _gaq.push(['_trackPageview']);
+    _gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    // Configuration API test
+    Flowtime.showProgress(true);
+    // Flowtime.fragmentsOnSide(true);
+    // Flowtime.fragmentsOnBack(true);
+    // Flowtime.useHistory(false);
+    // Flowtime.slideInPx(true);
+    // Flowtime.sectionsSlideToTop(true);
+    // Flowtime.gridNavigation(false);
+    // Flowtime.useOverviewVariant(true);
+    // Flowtime.parallaxInPx(true);
+    // Flowtime.clicker(true);
+    // Flowtime.loop(true);
+    //
+    //
+
+    // starts the application with configuration options
+    Flowtime.start();
+  </script>
+
+</body>
+</html>

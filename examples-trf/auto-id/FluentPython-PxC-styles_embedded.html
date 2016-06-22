@@ -1,0 +1,1277 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0 minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="marcolago">
+
+  <meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+  <title>Flowtime.js - Duplicated IDs Demo</title>
+
+  <style media="screen" type="text/css">
+
+/*reset.css*/
+/*! normalize.css v4.0.0 | MIT License | github.com/necolas/normalize.css */
+
+/**
+ * 1. Change the default font family in all browsers (opinionated).
+ * 2. Prevent adjustments of font size after orientation changes in IE and iOS.
+ */
+
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+body {
+  margin: 0;
+}
+
+/* HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ * 2. Add the correct display in IE.
+ */
+
+article,
+aside,
+details, /* 1 */
+figcaption,
+figure,
+footer,
+header,
+main, /* 2 */
+menu,
+nav,
+section,
+summary { /* 1 */
+  display: block;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+
+progress {
+  vertical-align: baseline;
+}
+
+/**
+ * Add the correct display in IE 10-.
+ * 1. Add the correct display in IE.
+ */
+
+template, /* 1 */
+[hidden] {
+  display: none;
+}
+
+/* Links
+   ========================================================================== */
+
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+
+a {
+  background-color: transparent;
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  text-decoration: underline dotted; /* 2 */
+}
+
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+
+b,
+strong {
+  font-weight: inherit;
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+
+img {
+  border-style: none;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/**
+ * Add the correct margin in IE 8.
+ */
+
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+
+hr {
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * Change font properties to `inherit` in all browsers (opinionated).
+ */
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/**
+ * Restore the font weight unset by the previous rule.
+ */
+
+optgroup {
+  font-weight: bold;
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ * 2. Show the overflow in Edge, Firefox, and IE.
+ */
+
+button,
+input, /* 1 */
+select { /* 2 */
+  overflow: visible;
+}
+
+/**
+ * Remove the margin in Safari.
+ * 1. Remove the margin in Firefox and Safari.
+ */
+
+button,
+input,
+select,
+textarea { /* 1 */
+  margin: 0;
+}
+
+/**
+ * Remove the inheritence of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritence of text transform in Firefox.
+ */
+
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Change the cursor in all browsers (opinionated).
+ */
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+}
+
+/**
+ * Restore the default cursor to disabled elements unset by the previous rule.
+ */
+
+[disabled] {
+  cursor: default;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS.
+ */
+
+button,
+html [type="button"], /* 1 */
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+button:-moz-focusring,
+input:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * Correct the odd appearance of search inputs in Chrome and Safari.
+ */
+
+[type="search"] {
+  -webkit-appearance: textfield;
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome on OS X and
+ * Safari on OS X.
+ */
+
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+/*end reset.css*/
+/*flowtime.css contents */
+    /* STRUCTURE */
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    -webkit-text-size-adjust:none;
+  }
+
+  body {
+  }
+
+  .flowtime {
+    font-size: 0;       /* removes the white spaces between inline-block elements */
+                /* WARNING! this technique does non remove the white-space in Safari for Windows */
+                /* unless you use this hack: http://absolide.tumblr.com/post/36597829434/safari-inline-block-white-spaces-bug-fix */
+                /* you can use any other white-space removal technique as per: http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+    white-space: nowrap;  /* disable the wrapping of the space between articles */
+    width: 100%;
+    height: 100%;
+        -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        -ms-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    -webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
+
+  }
+
+  .flowtime.no-transition {
+    -webkit-transition: -webkit-transform 0s;
+       transition: transform 0s;
+  }
+
+/* SECTIONS (COLUMNS) */
+
+  /* base section */
+  .ft-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0);
+  }
+
+  /* section and section thumb alignment */
+  .ft-section,
+  .ft-section-thumb {
+    font-size: 16px;    /* reset the regular font size, in the old way… */
+    font-size: 1rem;    /* and in the modern way */
+    white-space: normal;
+    display: inline-block;  /* let the block elements stay on the same line */
+                /* used together the white-space: nowrap; declaration */
+                /* the elements doesn't break the line */
+    vertical-align: top;  /* fix the default alignement for the inline-block elements (default: baseline) */
+                /* if different from "top" set Flowtime.slideWithPx(true) */
+  }
+
+  .ft-scroll-the-section .ft-section {
+    transition: transform 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-cross .ft-section,
+  .ft-cross .ft-section-thumb {
+    font-size: 0;
+    line-height: 1;
+    white-space: nowrap;
+    display: block;
+  }
+
+/* PAGES */
+
+  /* base page */
+  .ft-page {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: auto;
+    /**
+     * GPU acceleration disabled to drop down memory consuption on tablet and smartphones
+     */
+    /*
+        -ms-transform: translateZ(0);
+       -moz-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+    */
+  }
+
+  .ft-cross .ft-page,
+  .ft-cross .ft-page-thumb {
+    font-size: 16px;    /* reset the regular font size, in the old way… */
+    font-size: 1rem;    /* and in the modern way */
+    white-space: normal;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  /**
+   * GPU acceleration enabled only on the pages involved in the slide animation to ensure no glitches on transition
+   */
+  .ft-page.actual,
+  .ft-page.actual-out {
+    z-index: 100;
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+
+  /* pages in overview mode */
+  .ft-overview .ft-page {
+    opacity: 0.5;
+    cursor: pointer;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+        -ms-transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+        -ms-transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+  }
+
+  .ft-overview .ft-page * {
+    pointer-events: none;
+  }
+
+/* JAVASCRIPT NAVIGATION HOOKS */
+
+  .ft-absolute-nav {
+    overflow: hidden;
+  }
+
+
+  .ft-absolute-nav .flowtime {
+    position: absolute;
+  }
+
+/* EYE CANDY OVERRIDABLE CLASSES AND PROPERTIES */
+
+/* FRAGMENTS */
+
+  .ft-fragment {
+    opacity: 0;
+    -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+
+  .ft-fragment.revealed.step {
+    opacity: 0.3;
+  }
+
+  .ft-fragment.revealed.shy {
+    opacity: 0;
+  }
+
+  .ft-fragment.revealed,
+  .ft-fragment.revealed-temp,
+  .ft-fragment.revealed.actual {
+    opacity: 1;
+  }
+
+/* DEFAULT PROGRESS */
+
+  .ft-default-progress {
+    position: fixed;
+    bottom: 16px;
+    bottom: 1rem;
+    right: 16px;
+    right: 1rem;
+    z-index: 1000;
+    opacity: 0.3;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-default-progress:hover {
+    opacity: 1;
+  }
+
+  /* default progress disappears when in overview mode */
+  .ft-overview .ft-default-progress {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* default progress page thumb */
+  .ft-page-thumb {
+    box-sizing: border-box;
+    width: 1rem;
+    height: 0.7rem;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    background-color: rgba(0,0,0,0.7);
+    cursor: pointer;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-page-thumb:hover {
+    background-color: rgba(255,255,255,0.7);
+  }
+
+  .ft-page-thumb.actual {
+    background-color: rgba(255,255,255,0.5);
+    border: 1px solid #ffffff;
+  }
+
+  /* overview mode page highlighting */
+
+  .ft-overview .ft-page.actual {
+    opacity: 0.25;
+  }
+
+  .ft-overview .ft-page.hilite {
+    opacity: 1;
+  }
+
+  .ft-overview .ft-page:hover {
+    opacity: 1;
+  }
+
+/* HARDWARE ACCELERATED ELEMENTS */
+/* I've not used * because causes issues with current Chrome */
+
+  img {
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        -ms-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+  }
+
+/* PARALLAX MANAGEMENT */
+
+  .parallax {
+    position: relative;
+    -webkit-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+       transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+  }
+
+  .ft-overview .parallax {
+        -ms-transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+            transform: translateZ(0) !important;
+  }
+
+    .titles {
+      text-align: justify;
+      padding: 0.5em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .titles:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .titles a {
+      color: white;
+    }
+/*end flowtime.css*/
+
+/*default.css*/
+/* Generated by Font Squirrel (http://www.fontsquirrel.com) on December 29, 2012 05:04:11 AM America/New_York */
+
+@font-face {
+    font-family: 'AmaranthRegular';
+    src: url('../../assets/fonts/Amaranth-webfont.eot');
+    src: url('../../assets/fonts/Amaranth-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../assets/fonts/Amaranth-webfont.woff') format('woff'),
+         url('../../assets/fonts/Amaranth-webfont.ttf') format('truetype'),
+         url('../../assets/fonts/Amaranth-webfont.svg#AmaranthRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'AmaranthItalic';
+    src: url('../../assets/fonts/Amaranth-Italic-webfont.eot');
+    src: url('../../assets/fonts/Amaranth-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../assets/fonts/Amaranth-Italic-webfont.woff') format('woff'),
+         url('../../assets/fonts/Amaranth-Italic-webfont.ttf') format('truetype'),
+         url('../../assets/fonts/Amaranth-Italic-webfont.svg#AmaranthItalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'AmaranthBold';
+    src: url('../../assets/fonts/Amaranth-Bold-webfont.eot');
+    src: url('../../assets/fonts/Amaranth-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../assets/fonts/Amaranth-Bold-webfont.woff') format('woff'),
+         url('../../assets/fonts/Amaranth-Bold-webfont.ttf') format('truetype'),
+         url('../../assets/fonts/Amaranth-Bold-webfont.svg#AmaranthBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'AmaranthBoldItalic';
+    src: url('../../assets/fonts/Amaranth-BoldItalic-webfont.eot');
+    src: url('../../assets/fonts/Amaranth-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../assets/fonts/Amaranth-BoldItalic-webfont.woff') format('woff'),
+         url('../../assets/fonts/Amaranth-BoldItalic-webfont.ttf') format('truetype'),
+         url('../../assets/fonts/Amaranth-BoldItalic-webfont.svg#AmaranthBoldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+
+}
+
+/* theme */
+
+html {
+  font-size: 100%;
+  line-height: 1.5rem;
+  background-color: #333333;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+body {
+  font-family: "AmaranthRegular", sans-serif;
+}
+
+.navigation, .credits, .switches {
+  display: none;
+}
+
+.ft-page {
+  padding: 2rem;
+  background-color: #424242;
+}
+
+.flowtime h1,
+.flowtime h2,
+.flowtime h3,
+.flowtime h4,
+.flowtime h5,
+.flowtime h6,
+.flowtime p,
+.flowtime ul,
+.flowtime ol,
+.flowtime dl,
+.flowtime li,
+.flowtime dt,
+.flowtime dd {
+  display: block;
+     -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+  -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+          transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+}
+
+/* headings */
+
+.flowtime h1,
+.flowtime h2,
+.flowtime h3,
+.flowtime h4,
+.flowtime h5,
+.flowtime h6 {
+  font-family: "AmaranthBold";
+  font-weight: bold;
+  color: #cccccc;
+  text-shadow: 1px 2px 0 rgba(255,255,255,0.2);
+}
+
+.flowtime h1 {
+  font-size: 3.5rem;
+  line-height: 3rem;
+  margin: 1rem 0 2rem 0;
+}
+
+.flowtime h2 {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  margin: 2rem 0;
+}
+
+.flowtime h3 {
+  font-size: 2rem;
+  line-height: 2rem;
+  margin: 2rem 0;
+}
+
+.flowtime h4,
+.flowtime h5,
+.flowtime h6 {
+  font-size: 1.75rem;
+  line-height: 2rem;
+  margin: 2rem 0;
+}
+
+/* paragraph */
+
+.flowtime p {
+  font-size: 1.75rem;
+  line-height: 2rem;
+  margin: 2rem 0;
+}
+
+/* lists */
+
+.flowtime ul,
+.flowtime ol,
+.flowtime dl {
+  font-size: 1.75rem;
+  line-height: 2rem;
+  margin: 2rem 0;
+}
+
+.flowtime ul,
+.flowtime ol,
+.flowtime dl {
+  margin: 0 2rem;
+}
+
+.flowtime li,
+.flowtime dd {
+  line-height: 1.75rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.flowtime dt {
+  position: relative;
+}
+
+.flowtime ul li:before,
+.flowtime dl dt:before {
+  content: "\2022";
+  text-align: right;
+  color: #ffdd00;
+  margin-right: 0.5rem;
+  display: inline-block;
+  position: absolute;
+  left: -1rem;
+}
+
+.flowtime ol {
+  counter-reset: list;
+}
+
+.flowtime ol li:before {
+  content: counter(list) ".";
+  counter-increment: list;
+  font-size: 0.75em;
+  color: #ffdd00;
+  margin-right: 0.5rem;
+  display: inline-block;
+  position: relative;
+  top: -0.075em;
+}
+
+.flowtime dl dd {
+  font-size: 0.8em;
+  margin-left: 1rem;
+}
+
+.flowtime small {
+  font-size: 0.6em;
+  vertical-align: middle;
+}
+
+.flowtime pre,
+.flowtime code {
+  font-family: monospace;
+  margin: 1rem 0;
+}
+
+.flowtime strong {
+  font-weight: bold;
+  color: #ffdd00;
+  text-shadow: 1px 2px 0 rgba(0,0,0,0.5);
+}
+
+/* quotes and citations */
+
+.flowtime q {
+  quotes: "“" "”";
+}
+
+.flowtime q:before {
+  content: open-quote;
+}
+
+.flowtime q:after {
+  content: close-quote;
+}
+
+.flowtime blockquote {
+  font-size: 1.5rem;
+  margin: 1.5rem 2rem;
+  padding: 1rem;
+  background-color: rgba(0,0,0,0.3);
+  border-left: 0.5rem solid rgba(255,255,255,0.5);
+  border-radius: 0.5rem;
+}
+
+.flowtime q,
+.flowtime cite,
+.flowtime blockquote {
+  font-style: italic;
+}
+
+/* variations */
+
+.flowtime .small {
+  font-size: 0.6em;
+}
+
+.flowtime .attention {
+  color: #ff0000;
+  text-shadow: 1px 2px 0 #000000, 1px -1px 0 rgba(0,0,0,0.3), -1px -1px 0 rgba(0,0,0,0.3), -1px 1px 0 rgba(0,0,0,0.3)
+}
+
+/* links and focus */
+
+.flowtime a,
+.flowtime a:link,
+.flowtime a:visited,
+.flowtime a:hover,
+.flowtime a:active,
+.flowtime a:focus,
+.flowtime a:hover img,
+.flowtime a:active img,
+.flowtime a:focus img {
+  color: #32affc;
+  text-shadow: 1px 1px 0 #000000;
+     -moz-transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+          transition: all 0.3s;
+}
+
+.flowtime a:hover,
+.flowtime a:active,
+.flowtime a:focus,
+.flowtime a:hover img,
+.flowtime a:active img,
+.flowtime a:focus img {
+  color: #ff9900;
+  outline: none;
+  background-color: rgba(255,255,255,0.2);
+  -webkit-box-shadow: 1px 2px 10px 0 rgba(0,0,0,0.5);
+          box-shadow: 1px 2px 10px 0 rgba(0,0,0,0.5);
+}
+
+.flowtime a:hover img,
+.flowtime a:active img,
+.flowtime a:focus img {
+  -webkit-box-shadow: 1px 2px 10px 5px rgba(0,0,0,0.5);
+          box-shadow: 1px 2px 10px 5px rgba(0,0,0,0.5);
+}
+
+/* stackable content */
+
+.flowtime .stack {
+  width: 100%;
+  height: 100%;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.flowtime .stacked {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.flowtime img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+/* horizontally and vertically centered stackable content */
+
+.flowtime .stack-center {
+  text-align: center;
+  white-space: nowrap;
+  position: absolute;
+  top:  2rem;
+  right:  2rem;
+  bottom: 2rem;
+  left:   2rem;
+}
+
+.flowtime .stack-center:before {
+  content: "";
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.flowtime .stack-center .stacked-center {
+  white-space: normal;
+  max-width: 100%;
+  max-height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.flowtime .stack-center .stacked-center li {
+  text-align: left;
+}
+
+.flowtime .stacked-center img {
+  display: inline-block;
+}
+
+.flowtime .stacked-center img {
+	display: inline-block;
+}
+
+/* media queries */
+
+@media screen and (min-height: 41em) and (min-width: 80em)
+{
+  html {
+    font-size: 120%;
+  }
+
+  .ft-page {
+
+  }
+}
+
+@media screen and (min-height: 50em) and (min-width: 90em)
+{
+  html {
+    font-size: 140%;
+  }
+
+  .ft-page {
+
+  }
+}
+
+@media screen and (max-height: 36.14em)
+{
+  html {
+    font-size: 50%;
+  }
+
+  .ft-page {
+
+  }
+}
+
+/* parallax demo */
+
+.parallax-demo {
+  overflow: hidden;
+}
+
+.parallax-demo .kingmix {
+  position: absolute;
+  left: 20%;
+  bottom: -10%;
+  z-index: 50;
+}
+
+.parallax-demo .sax {
+  position: absolute;
+  left: 6%;
+  bottom: -18%;
+  z-index: 40;
+}
+
+.parallax-demo .tone {
+  position: absolute;
+  left: 49%;
+  bottom: -32%;
+  z-index: 30;
+}
+/*end default.css*/
+
+
+</style>
+
+</head>
+
+<body class="">
+  <main>
+    <div class="flowtime ft-cross">
+      <div class="ft-section" data-id="Part_1" data-title="Prologue">
+        <div class="ft-page" data-id="Chapter_01" data-title="The Python Data Model">
+          <h2 id="the-python-data-model">The Python Data Model</h2>
+          <p>A single chapter about the Python data model explaining how the special methods (e.g., <strong>repr</strong>            ) are the key to the consistent behavior of objects of all types— in a language that is admired for its consistency.
+            Understanding various facets of the data model is the subject of most of the rest of the book, but Chapter 1
+            provides a high-level overview.</p>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_2" data-title="Data structures">
+        <div class="ft-page" data-id="Chapter_02" data-title="An array of sequences">
+          <h2 id="an-array-of-sequences">An array of sequences</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_03" data-title="Dictionaries and sets">
+          <h2 id="dictionaries-and-sets">Dictionaries and sets</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_04" data-title="Text versus bytes">
+          <h2 id="text-versus-bytes">Text versus bytes</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_3" data-title="Functions as objects">
+        <div class="ft-page" data-id="Chapter_05" data-title="First-class functions">
+          <h2 id="first-class-functions">First-class functions</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_06" data-title="Design patterns with first-class functions">
+          <h2 id="design-patterns-with-first-class-functions">Design patterns with first-class functions</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_07" data-title="Function decorators and closures">
+          <h2 id="function-decorators-and-closures">Function decorators and closures</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_4" data-title="Object Oriented Idioms">
+        <div class="ft-page" data-id="Chapter_08" data-title="Object references, mutability and recycling">
+          <h2 id="object-references-mutability-and-recycling">Object references, mutability and recycling</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_09" data-title="A Pythonic object">
+          <h2 id="a-pythonic-object">A Pythonic object</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_10" data-title="Sequence hacking, hashing and slicing">
+          <h2 id="sequence-hacking-hashing-and-slicing">Sequence hacking, hashing and slicing</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_11" data-title="Interfaces: from protocols to ABCs">
+          <h2 id="interfaces-from-protocols-to-abcs">Interfaces: from protocols to ABCs</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_12" data-title="Inheritance: for good or for worse">
+          <h2 id="inheritance-for-good-or-for-worse">Inheritance: for good or for worse</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_13" data-title="Operator overloading: doing it right">
+          <h2 id="operator-overloading-doing-it-right">Operator overloading: doing it right</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_5" data-title="Control flow">
+        <div class="ft-page" data-id="Chapter_14" data-title="Iterables, iterators and generators">
+          <h2 id="iterables-iterators-and-generators">Iterables, iterators and generators</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_15" data-title="Context managers and else blocks">
+          <h2 id="context-managers-and-else-blocks">Context managers and else blocks</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_16" data-title="Coroutines">
+          <h2 id="coroutines">Coroutines</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_17" data-title="Concurrency with futures">
+          <h2 id="concurrency-with-futures">Concurrency with futures</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_18" data-title="Concurrency with asyncio">
+          <h2 id="concurrency-with-asyncio">Concurrency with asyncio</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_6" data-title="Metaprogramming">
+        <div class="ft-page" data-id="Chapter_19" data-title="Dynamic attributes and properties">
+          <h2 id="dynamic-attributes-and-properties">Dynamic attributes and properties</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_20" data-title="Attribute descriptors">
+          <h2 id="attribute-descriptors">Attribute descriptors</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_21" data-title="Class metaprogramming">
+          <h2 id="class-metaprogramming">Class metaprogramming</h2>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <script src="../../js/brav1toolbox.js"></script>
+  <script src="../../js/flowtime.js"></script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1228618-10']);
+    _gaq.push(['_trackPageview']);
+    _gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    // Configuration API test
+    Flowtime.showProgress(true);
+    // Flowtime.fragmentsOnSide(true);
+    // Flowtime.fragmentsOnBack(true);
+    // Flowtime.useHistory(false);
+    // Flowtime.slideInPx(true);
+    // Flowtime.sectionsSlideToTop(true);
+    // Flowtime.gridNavigation(false);
+    // Flowtime.useOverviewVariant(true);
+    // Flowtime.parallaxInPx(true);
+    // Flowtime.clicker(true);
+    // Flowtime.loop(true);
+    //
+    //
+
+    // starts the application with configuration options
+    Flowtime.start();
+  </script>
+
+</body>
+
+</html>

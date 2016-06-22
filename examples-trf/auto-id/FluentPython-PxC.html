@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0 minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="marcolago">
+
+  <meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+  <title>Flowtime.js - Duplicated IDs Demo</title>
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../css/flowtime.css">
+  <link rel="stylesheet" href="../../css/themes/default.css">
+
+  <style>
+    .titles {
+      text-align: justify;
+      padding: 0.5em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .titles:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .titles a {
+      color: white;
+    }
+  </style>
+
+</head>
+
+<body class="">
+  <main>
+    <div class="flowtime ft-cross">
+      <div class="ft-section" data-id="Part_1" data-title="Prologue">
+        <div class="ft-page" data-id="Chapter_01" data-title="The Python Data Model">
+          <h2 id="the-python-data-model">The Python Data Model</h2>
+          <p>A single chapter about the Python data model explaining how the special methods (e.g., <strong>repr</strong>            ) are the key to the consistent behavior of objects of all types— in a language that is admired for its consistency.
+            Understanding various facets of the data model is the subject of most of the rest of the book, but Chapter 1
+            provides a high-level overview.</p>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_2" data-title="Data structures">
+        <div class="ft-page" data-id="Chapter_02" data-title="An array of sequences">
+          <h2 id="an-array-of-sequences">An array of sequences</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_03" data-title="Dictionaries and sets">
+          <h2 id="dictionaries-and-sets">Dictionaries and sets</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_04" data-title="Text versus bytes">
+          <h2 id="text-versus-bytes">Text versus bytes</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_3" data-title="Functions as objects">
+        <div class="ft-page" data-id="Chapter_05" data-title="First-class functions">
+          <h2 id="first-class-functions">First-class functions</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_06" data-title="Design patterns with first-class functions">
+          <h2 id="design-patterns-with-first-class-functions">Design patterns with first-class functions</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_07" data-title="Function decorators and closures">
+          <h2 id="function-decorators-and-closures">Function decorators and closures</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_4" data-title="Object Oriented Idioms">
+        <div class="ft-page" data-id="Chapter_08" data-title="Object references, mutability and recycling">
+          <h2 id="object-references-mutability-and-recycling">Object references, mutability and recycling</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_09" data-title="A Pythonic object">
+          <h2 id="a-pythonic-object">A Pythonic object</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_10" data-title="Sequence hacking, hashing and slicing">
+          <h2 id="sequence-hacking-hashing-and-slicing">Sequence hacking, hashing and slicing</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_11" data-title="Interfaces: from protocols to ABCs">
+          <h2 id="interfaces-from-protocols-to-abcs">Interfaces: from protocols to ABCs</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_12" data-title="Inheritance: for good or for worse">
+          <h2 id="inheritance-for-good-or-for-worse">Inheritance: for good or for worse</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_13" data-title="Operator overloading: doing it right">
+          <h2 id="operator-overloading-doing-it-right">Operator overloading: doing it right</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_5" data-title="Control flow">
+        <div class="ft-page" data-id="Chapter_14" data-title="Iterables, iterators and generators">
+          <h2 id="iterables-iterators-and-generators">Iterables, iterators and generators</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_15" data-title="Context managers and else blocks">
+          <h2 id="context-managers-and-else-blocks">Context managers and else blocks</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_16" data-title="Coroutines">
+          <h2 id="coroutines">Coroutines</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_17" data-title="Concurrency with futures">
+          <h2 id="concurrency-with-futures">Concurrency with futures</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_18" data-title="Concurrency with asyncio">
+          <h2 id="concurrency-with-asyncio">Concurrency with asyncio</h2>
+        </div>
+      </div>
+      <div class="ft-section" data-id="Part_6" data-title="Metaprogramming">
+        <div class="ft-page" data-id="Chapter_19" data-title="Dynamic attributes and properties">
+          <h2 id="dynamic-attributes-and-properties">Dynamic attributes and properties</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_20" data-title="Attribute descriptors">
+          <h2 id="attribute-descriptors">Attribute descriptors</h2>
+        </div>
+        <div class="ft-page" data-id="Chapter_21" data-title="Class metaprogramming">
+          <h2 id="class-metaprogramming">Class metaprogramming</h2>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <script src="../../js/brav1toolbox.js"></script>
+  <script src="../../js/flowtime.js"></script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1228618-10']);
+    _gaq.push(['_trackPageview']);
+    _gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    // Configuration API test
+    Flowtime.showProgress(true);
+    // Flowtime.fragmentsOnSide(true);
+    // Flowtime.fragmentsOnBack(true);
+    // Flowtime.useHistory(false);
+    // Flowtime.slideInPx(true);
+    // Flowtime.sectionsSlideToTop(true);
+    // Flowtime.gridNavigation(false);
+    // Flowtime.useOverviewVariant(true);
+    // Flowtime.parallaxInPx(true);
+    // Flowtime.clicker(true);
+    // Flowtime.loop(true);
+    //
+    //
+
+    // starts the application with configuration options
+    Flowtime.start();
+  </script>
+
+</body>
+
+</html>
