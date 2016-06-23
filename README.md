@@ -21,7 +21,7 @@ Flowtime has the 'overview-grid' that can be turned on to show you where you are
 
 ### Let me provide some drawings to show what this might look like:
 
-![New grid mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Parts_Chp_Sec_pg.png "Overview mockup")
+![New grid mockup](https://github.com/tfer/flowtime.js/raw/master/img-trf/Parts_Chp_Sec_pg.png "Overview mockup")
 
 ### In the above drawing,
 
@@ -35,7 +35,7 @@ Say that a Topic has too many subtopics to cover on a single slide, how are we g
 
 ## Drawing to show a transition to two levels of Subtopics:
 
-![Transition mockup](https://github.com/tfer/flowtime.js/raw/master/assets/img/Transition_topic2sub.png "Transition to subtopics")
+![Transition mockup](https://github.com/tfer/flowtime.js/raw/master/img-trf/Transition_topic2sub.png "Transition to subtopics")
 
 ### In the above drawing,
 
