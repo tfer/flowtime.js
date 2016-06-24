@@ -39,7 +39,7 @@
 /* SECTIONS (COLUMNS) */
 
   /* base section */
-  .ft-section {
+  .ft-A {
     width: 100%;
     height: 100%;
     position: relative;
@@ -47,8 +47,8 @@
   }
 
   /* section and section thumb alignment */
-  .ft-section,
-  .ft-section-thumb {
+  .ft-A,
+  .ft-A-thumb {
     font-size: 16px;    /* reset the regular font size, in the old way… */
     font-size: 1rem;    /* and in the modern way */
     white-space: normal;
@@ -59,12 +59,12 @@
                 /* if different from "top" set Flowtime.slideWithPx(true) */
   }
 
-  .ft-scroll-the-section .ft-section {
+  .ft-scroll-the-section .ft-A {
     transition: transform 0.5s cubic-bezier(.77, .10, .22, 1);
   }
 
-  .ft-cross .ft-section,
-  .ft-cross .ft-section-thumb {
+  .ft-cross .ft-A,
+  .ft-cross .ft-A-thumb {
     font-size: 0;
     line-height: 1;
     white-space: nowrap;
@@ -74,7 +74,7 @@
 /* PAGES */
 
   /* base page */
-  .ft-page {
+  .ft-B {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
@@ -91,8 +91,8 @@
     */
   }
 
-  .ft-cross .ft-page,
-  .ft-cross .ft-page-thumb {
+  .ft-cross .ft-B,
+  .ft-cross .ft-B-thumb {
     font-size: 16px;    /* reset the regular font size, in the old way… */
     font-size: 1rem;    /* and in the modern way */
     white-space: normal;
@@ -103,8 +103,8 @@
   /**
    * GPU acceleration enabled only on the pages involved in the slide animation to ensure no glitches on transition
    */
-  .ft-page.actual,
-  .ft-page.actual-out {
+  .ft-B.actual,
+  .ft-B.actual-out {
     z-index: 100;
         -ms-transform: translateZ(0);
     -webkit-transform: translateZ(0);
@@ -112,7 +112,7 @@
   }
 
   /* pages in overview mode */
-  .ft-overview .ft-page {
+  .ft-overview .ft-B {
     opacity: 0.5;
     cursor: pointer;
     -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -125,7 +125,7 @@
             transform-origin: 50% 50%;
   }
 
-  .ft-overview .ft-page * {
+  .ft-overview .ft-B * {
     pointer-events: none;
   }
 
@@ -192,7 +192,7 @@
   }
 
   /* default progress page thumb */
-  .ft-page-thumb {
+  .ft-B-thumb {
     box-sizing: border-box;
     width: 1rem;
     height: 0.7rem;
@@ -204,26 +204,26 @@
        transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
   }
 
-  .ft-page-thumb:hover {
+  .ft-B-thumb:hover {
     background-color: rgba(255,255,255,0.7);
   }
 
-  .ft-page-thumb.actual {
+  .ft-B-thumb.actual {
     background-color: rgba(255,255,255,0.5);
     border: 1px solid #ffffff;
   }
 
   /* overview mode page highlighting */
 
-  .ft-overview .ft-page.actual {
+  .ft-overview .ft-B.actual {
     opacity: 0.25;
   }
 
-  .ft-overview .ft-page.hilite {
+  .ft-overview .ft-B.hilite {
     opacity: 1;
   }
 
-  .ft-overview .ft-page:hover {
+  .ft-overview .ft-B:hover {
     opacity: 1;
   }
 

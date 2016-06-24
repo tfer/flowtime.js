@@ -1,11 +1,10 @@
 ![Flowtime.js](https://github.com/tfer/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-## What this branche is for
+## What this branch is for
 
 * myExamples -- sandbox to explore/augment Marco's included examples
 
 
-Maybe I'll submit it to PyCon as that is coming to Cleveland, (where I'm at) for the next two years!  Anyway, I need this for my own study plans so I'll keep plugging away at is.
 
 ### Design thoughts
 

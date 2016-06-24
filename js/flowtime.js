@@ -26,10 +26,10 @@ var Flowtime = (function ()
   /**
    * application constants
    */
-  var SECTION_CLASS                = "ft-section";
-  var SECTION_SELECTOR             = "." + SECTION_CLASS;
-  var PAGE_CLASS                   = "ft-page";
-  var PAGE_SELECTOR                = "." + PAGE_CLASS;
+  var A_CORD_CLASS                = "ft-A";
+  var A_CORD_SELECTOR             = "." + A_CORD_CLASS;
+  var B_CORD_CLASS                   = "ft-B";
+  var B_CORD_SELECTOR                = "." + B_CORD_CLASS;
   var FRAGMENT_CLASS               = "ft-fragment";
   var FRAGMENT_SELECTOR            = "." + FRAGMENT_CLASS;
   var FRAGMENT_REVEALED_CLASS      = "revealed";
@@ -37,12 +37,12 @@ var Flowtime = (function ()
   var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
   var DEFAULT_PROGRESS_CLASS       = "ft-default-progress";
   var DEFAULT_PROGRESS_SELECTOR    = "." + DEFAULT_PROGRESS_CLASS;
-  var SECTION_THUMB_CLASS          = "ft-section-thumb";
-  var SECTION_THUMB_SELECTOR       = "." + SECTION_THUMB_CLASS;
-  var PAGE_THUMB_CLASS             = "ft-page-thumb";
-  var PAGE_THUMB_SELECTOR          = "." + PAGE_THUMB_CLASS;
+  var A_CORD_THUMB_CLASS          = "ft-A-thumb";
+  var A_CORD_THUMB_SELECTOR       = "." + A_CORD_THUMB_CLASS;
+  var B_CORD_THUMB_CLASS             = "ft-B-thumb";
+  var B_CORD_THUMB_SELECTOR          = "." + B_CORD_THUMB_CLASS;
   var CROSS_DIRECTION_CLASS        = "ft-cross";
-  var SCROLL_THE_SECTION_CLASS     = "ft-scroll-the-section";
+  var SCROLL_THE_A_CORD_CLASS     = "ft-scroll-the-A_Cord";
 
   /**
    * events
@@ -58,20 +58,20 @@ var Flowtime = (function ()
   var html = document.querySelector("html");                                             // cached reference to html element
   var body = document.querySelector("body");                                             // cached reference to body element
   var useHash = false;                                                                   // if true the engine uses only the hash change logic
-  var currentHash = "";                                                                  // the hash string of the current section / page pair
-  var pastIndex = { section:0, page:0 };                                                 // section and page indexes of the past page
+  var currentHash = "";                                                                  // the hash string of the current A_Cord / B_Cord pair
+  var pastIndex = { A_Cord:0, B_Cord:0 };                                                 // A_Cord and B_Cord indexes of the past B_Cord
   var siteName = document.title;                                                         // cached base string for the site title
   var overviewCachedDest;                                                                // caches the destination before performing an overview zoom out for navigation back purposes
   var overviewFixedScaleFactor = 22;                                                     // fixed scale factor for overview variant
   var defaultProgress = null;                                                            // default progress bar reference
-  var sectionDataIdMax = 0;                
+  var A_CordDataIdMax = 0;                
                  
   var _isOverview = false;                                                               // Boolean status for the overview
   var _useOverviewVariant = false;                                                       // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
-  var _fragmentsOnSide = false;                                                          // enable or disable fragments navigation when navigating from sections
-  var _fragmentsOnBack = true;                                                           // shows or hide fragments when navigating back to a page
+  var _fragmentsOnSide = false;                                                          // enable or disable fragments navigation when navigating from A_Cords
+  var _fragmentsOnBack = true;                                                           // shows or hide fragments when navigating back to a B_Cord
   var _slideInPx = false;                                                                // calculate the slide position in px instead of %, use in case the % mode does not works
-  var _twoStepsSlide = false;                                                            // not yet implemented! slides up or down before, then slides to the page
+  var _twoStepsSlide = false;                                                            // not yet implemented! slides up or down before, then slides to the B_Cord
   var _isLoopable = false;                 
   var _showProgress = false;                                                             // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
   var _clickerMode = false;                                                              // Used if presentation is being controlled by a "presenter" device (e.g., R400)
@@ -85,38 +85,38 @@ var Flowtime = (function ()
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
-  var _sectionNavigationPrev = true;
-  var _sectionNavigationNext = true;
-  var _pageNavigationPrev = true;
-  var _pageNavigationNext = true;
+  var _A_CordNavigationPrev = true;
+  var _A_CordNavigationNext = true;
+  var _B_CordNavigationPrev = true;
+  var _B_CordNavigationNext = true;
   var _isScrolling = false;
   var _momentumScrollTimeout = 0;
   var _momentumScrollDelay = 2000;
   var _fireEvent = true;
   var _debouncingDelay = 1000;
   var _transitionPaused = false;
-  var _transitionTime = 500;                                                             // the page transition in milliseconds (keep in sync with the CSS transition value)
+  var _transitionTime = 500;                                                             // the B_Cord transition in milliseconds (keep in sync with the CSS transition value)
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);       // flag to set the cross direction layout and logic
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform");
-  var _toSectionsFromPages = true;                                                       // if false prevents the previous page and next page commands from navigating to previous and next sections
+  var _toA_CordsFromB_Cords = true;                                                       // if false prevents the previous B_Cord and next B_Cord commands from navigating to previous and next A_Cords
 
   var xGlobal = 0;
   var yGlobal = 0;
   var xGlobalDelta = 0;
   var yGlobalDelta = 0;
 
-  // section navigation modifiers
+  // A_Cord navigation modifiers
 
-  var _gridNavigation = false;                                                           // if true navigation with right or left arrow go to the first page of the section
-  var _backFromPageToTop = false;                                                        // if true, when going back from the first page of a section to the previous section, go to the first page of the new section
+  var _gridNavigation = false;                                                           // if true navigation with right or left arrow go to the first B_Cord of the A_Cord
+  var _backFromB_CordToTop = false;                                                        // if true, when going back from the first B_Cord of a A_Cord to the previous A_Cord, go to the first B_Cord of the new A_Cord
   var _nearestToTop = false;
-  var _rememberSectionsStatus = false;
-  var _rememberSectionsLastPage = false;
-  var _scrollTheSection = Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS);  // flag to set the scroll the section logic
-  var _sectionsStatus = [];
-  var _sectionsMaxPageDepth = 0;
-  var _sectionsLastPageDepth = 0;
+  var _rememberA_CordsStatus = false;
+  var _rememberA_CordsLastB_Cord = false;
+  var _scrollTheA_Cord = Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_A_CORD_CLASS);  // flag to set the scroll the A_Cord logic
+  var _A_CordsStatus = [];
+  var _A_CordsMaxB_CordDepth = 0;
+  var _A_CordsLastB_CordDepth = 0;
   var _showErrors = false;
 
   var _navigationCallback = null;
@@ -182,21 +182,21 @@ var Flowtime = (function ()
    */
 
   var NavigationMatrix = (function() {
-    var sections;                                             // HTML Collection of .flowtime > .ft-section elements
-    var sectionsArray;                                        // multi-dimensional array containing the pages' array
-    var allPages;                                             // HTML Collection of .flowtime .ft-page elements
+    var A_Cords;                                             // HTML Collection of .flowtime > .ft-A elements
+    var A_CordsArray;                                        // multi-dimensional array containing the B_Cords' array
+    var allB_Cords;                                             // HTML Collection of .flowtime .ft-B elements
     var fragments;                                            // HTML Collection of .fragment elements
-    var fragmentsArray;                                       // multi-dimensional array containing the per page fragments' array
-    var fr = [];                                              // multi-dimensional array containing the index of the current active fragment per page
+    var fragmentsArray;                                       // multi-dimensional array containing the per B_Cord fragments' array
+    var fr = [];                                              // multi-dimensional array containing the index of the current active fragment per B_Cord
     var parallaxElements = [];                                // array containing all elements with parrallax
-    var sectionsLength = 0;                                   // cached total number of .ft-section elements
-    var pagesLength = 0;                                      // cached max number of .page elements
-    var pagesTotalLength = 0;                                 // cached total number of .page elements
-    var p = 0;                                                // index of the current section viewved or higlighted
-    var sp = 0;                                               // index of the current page viewved or higlighted
-    var pCache = 0;                                           // cache index of the current section
-    var spCache = 0;                                          // cache index of the current page
-    var hilited;                                              // the current page higlighted, useful for overview mode
+    var A_CordsLength = 0;                                   // cached total number of .ft-A elements
+    var B_CordsLength = 0;                                      // cached max number of .B_Cord elements
+    var B_CordsTotalLength = 0;                                 // cached total number of .B_Cord elements
+    var p = 0;                                                // index of the current A_Cord viewved or higlighted
+    var sp = 0;                                               // index of the current B_Cord viewved or higlighted
+    var pCache = 0;                                           // cache index of the current A_Cord
+    var spCache = 0;                                          // cache index of the current B_Cord
+    var hilited;                                              // the current B_Cord higlighted, useful for overview mode
 
     /**
      * update the navigation matrix array
@@ -204,90 +204,90 @@ var Flowtime = (function ()
      * useful for updating the matrix when the site structure changes at runtime
      */
     function _updateMatrix() {
-      sectionsArray = [];
+      A_CordsArray = [];
       parallaxElements = [];
       fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
       fragmentsArray = [];
-      sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
-      allPages = ftContainer.querySelectorAll(".flowtime " + PAGE_SELECTOR);
+      A_Cords = ftContainer.querySelectorAll(".flowtime > " + A_CORD_SELECTOR);
+      allB_Cords = ftContainer.querySelectorAll(".flowtime " + B_CORD_SELECTOR);
       //
-      for (var i = 0; i < sections.length; i++) {
-        var pagesArray = [];
+      for (var i = 0; i < A_Cords.length; i++) {
+        var B_CordsArray = [];
         fragmentsArray[i] = [];
         fr[i] = [];
-        sectionDataIdMax += 1;
+        A_CordDataIdMax += 1;
         //
-        // set data-id and data-prog attributes to sections to manage the navigation
-        var section = sections[i];
-        if (section.getAttribute("data-id")) {
-          section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
+        // set data-id and data-prog attributes to A_Cords to manage the navigation
+        var A_Cord = A_Cords[i];
+        if (A_Cord.getAttribute("data-id")) {
+          A_Cord.setAttribute("data-id", "__" + unsafeAttr(A_Cord.getAttribute("data-id"))); // prevents attributes starting with a number
         } else {
-          section.setAttribute("data-id", "__" + sectionDataIdMax);
+          A_Cord.setAttribute("data-id", "__" + A_CordDataIdMax);
         }
-        if (section.getAttribute("data-prog")) {
-          section.setAttribute("data-prog", "__" + unsafeAttr(section.getAttribute("data-prog"))); // prevents attributes starting with a number
+        if (A_Cord.getAttribute("data-prog")) {
+          A_Cord.setAttribute("data-prog", "__" + unsafeAttr(A_Cord.getAttribute("data-prog"))); // prevents attributes starting with a number
         } else {
-          section.setAttribute("data-prog", "__" + sectionDataIdMax);
+          A_Cord.setAttribute("data-prog", "__" + A_CordDataIdMax);
         }
-        section.index = i;
-        // remove the standard ID section.setAttribute("id", "");
+        A_Cord.index = i;
+        // remove the standard ID A_Cord.setAttribute("id", "");
         //
-        // set data-id and data-prog attributes to pages to manage the navigation
-        pages = section.querySelectorAll(PAGE_SELECTOR);
-        pagesTotalLength += pages.length;
-        pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
-        for (var ii = 0; ii < pages.length; ii++) {
-          var page = pages[ii];
-          if (page.getAttribute("data-id")) {
-            page.setAttribute("data-id", "__" + unsafeAttr(page.getAttribute("data-id"))); // prevents attributes starting with a number
+        // set data-id and data-prog attributes to B_Cords to manage the navigation
+        B_Cords = A_Cord.querySelectorAll(B_CORD_SELECTOR);
+        B_CordsTotalLength += B_Cords.length;
+        B_CordsLength = Math.max(B_CordsLength, B_Cords.length); // sets the B_Cords max number for overview purposes
+        for (var ii = 0; ii < B_Cords.length; ii++) {
+          var B_Cord = B_Cords[ii];
+          if (B_Cord.getAttribute("data-id")) {
+            B_Cord.setAttribute("data-id", "__" + unsafeAttr(B_Cord.getAttribute("data-id"))); // prevents attributes starting with a number
           } else {
-            page.setAttribute("data-id", "__" + (ii + 1));
+            B_Cord.setAttribute("data-id", "__" + (ii + 1));
           }
-          if (page.getAttribute("data-prog")) {
-            page.setAttribute("data-prog", "__" + unsafeAttr(page.getAttribute("data-prog"))); // prevents attributes starting with a number
+          if (B_Cord.getAttribute("data-prog")) {
+            B_Cord.setAttribute("data-prog", "__" + unsafeAttr(B_Cord.getAttribute("data-prog"))); // prevents attributes starting with a number
           } else {
-            page.setAttribute("data-prog", "__" + (ii + 1));
+            B_Cord.setAttribute("data-prog", "__" + (ii + 1));
           }
-          page.index = ii;
-          // remove the standard ID page.setAttribute("id", "");
-          // set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
-          if (!page.getAttribute("data-title")) {
-            var heading = page.querySelector("h1");
+          B_Cord.index = ii;
+          // remove the standard ID B_Cord.setAttribute("id", "");
+          // set data-title attributes to B_Cords that doesn't have one and have at least an h1 heading element inside
+          if (!B_Cord.getAttribute("data-title")) {
+            var heading = B_Cord.querySelector("h1");
             if (heading !== null && heading.textContent.lenght !== "") {
-              page.setAttribute("data-title", heading.textContent);
+              B_Cord.setAttribute("data-title", heading.textContent);
             }
           }
           // store parallax data on elements
-          setParallax(page, i, ii);
+          setParallax(B_Cord, i, ii);
           //
-          pagesArray.push(page);
+          B_CordsArray.push(B_Cord);
           //
-          var subFragments = page.querySelectorAll(FRAGMENT_SELECTOR);
+          var subFragments = B_Cord.querySelectorAll(FRAGMENT_SELECTOR);
           fragmentsArray[i][ii] = subFragments;
           fr[i][ii] = -1;
         }
-        sectionsArray.push(pagesArray);
+        A_CordsArray.push(B_CordsArray);
       }
       //
-      sectionsLength = sections.length; // sets the sections max number for overview purposes
+      A_CordsLength = A_Cords.length; // sets the A_Cords max number for overview purposes
       resetScroll();
       _updateOffsets();
     }
 
     /**
      * stores parallax data directly on the dome elements with a data-parallax attribute
-     * data are stored on a multi dimensional array ordered per section and per page to easily manage the position
+     * data are stored on a multi dimensional array ordered per A_Cord and per B_Cord to easily manage the position
      */
-    function setParallax(page, sectionIndex, pageIndex) {
+    function setParallax(B_Cord, A_CordIndex, B_CordIndex) {
       if (_parallaxEnabled) {
-        if (parallaxElements[sectionIndex] === undefined) {
-          parallaxElements[sectionIndex] = [];
+        if (parallaxElements[A_CordIndex] === undefined) {
+          parallaxElements[A_CordIndex] = [];
         }
-        if (parallaxElements[sectionIndex][pageIndex] === undefined) {
-          parallaxElements[sectionIndex][pageIndex] = [];
+        if (parallaxElements[A_CordIndex][B_CordIndex] === undefined) {
+          parallaxElements[A_CordIndex][B_CordIndex] = [];
         }
         //
-        var pxs = page.querySelectorAll(".parallax");
+        var pxs = B_Cord.querySelectorAll(".parallax");
         if (pxs.length > 0) {
           for (var i = 0; i < pxs.length; i++) {
             var el = pxs[i];
@@ -302,7 +302,7 @@ var Flowtime = (function ()
             }
             el.pX = pX;
             el.pY = pY;
-            parallaxElements[sectionIndex][pageIndex].push(el);
+            parallaxElements[A_CordIndex][B_CordIndex].push(el);
           }
         }
       }
@@ -323,13 +323,13 @@ var Flowtime = (function ()
     */
 
     /**
-     * cache the position for every page, useful when navigatin in pixels or when attaching a page after scrolling
+     * cache the position for every B_Cord, useful when navigatin in pixels or when attaching a B_Cord after scrolling
      */
     function _updateOffsets () {
       xGlobal = ftContainer.offsetLeft;
       yGlobal = ftContainer.offsetTop;
-      for (var i = 0; i < allPages.length; i++) {
-        var _sp = allPages[i];
+      for (var i = 0; i < allB_Cords.length; i++) {
+        var _sp = allB_Cords[i];
         var _spParent = _sp.offsetParent;
         //
         if (i === 0) {
@@ -349,11 +349,11 @@ var Flowtime = (function ()
     }
 
     /**
-     * returns the next section in navigation
-     * @param top Boolean if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
+     * returns the next A_Cord in navigation
+     * @param top Boolean if true the next B_Cord will be the first B_Cord in the next array; if false the next A_Cord will be the same index B_Cord in the next array
      * @param fos Boolean value of _fragmentsOnSide
      */
-    function _getNextSection(top, fos) {
+    function _getNextA_Cord(top, fos) {
       var sub = sp;
       //
       var toTop = _isOverview === true ? false : top;
@@ -361,12 +361,12 @@ var Flowtime = (function ()
         _showFragment(p, sp);
       } else {
         sub = 0;
-        if (toTop === true && p + 1 <= sectionsArray.length - 1) {
+        if (toTop === true && p + 1 <= A_CordsArray.length - 1) {
           sub = 0;
-        } else if (toTop !== true || _fragmentsOnBack === true || p + 1 > sectionsArray.length - 1) {
+        } else if (toTop !== true || _fragmentsOnBack === true || p + 1 > A_CordsArray.length - 1) {
           sub = sp;
         }
-        var pTemp = Math.min(p + 1, sectionsArray.length - 1);
+        var pTemp = Math.min(p + 1, A_CordsArray.length - 1);
         if (_isLoopable === true && pTemp === p) {
           p = 0;
         } else {
@@ -374,26 +374,26 @@ var Flowtime = (function ()
         }
         //
         if (!_isOverview) {
-          if (_rememberSectionsStatus === true && _sectionsStatus[p] !== undefined) {
-            sub = _sectionsStatus[p];
+          if (_rememberA_CordsStatus === true && _A_CordsStatus[p] !== undefined) {
+            sub = _A_CordsStatus[p];
           }
           //
-          if (_rememberSectionsLastPage === true) {
-            sub = _sectionsLastPageDepth;
+          if (_rememberA_CordsLastB_Cord === true) {
+            sub = _A_CordsLastB_CordDepth;
           }
         }
         //
-        return _getNearestPage(sectionsArray[p], sub);
+        return _getNearestB_Cord(A_CordsArray[p], sub);
       }
-      return hiliteOrNavigate(sectionsArray[p][sp]);
+      return hiliteOrNavigate(A_CordsArray[p][sp]);
     }
 
     /**
-     * returns the prev section in navigation
-     * @param top Boolean if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
+     * returns the prev A_Cord in navigation
+     * @param top Boolean if true the next A_Cord will be the first B_Cord in the prev array; if false the prev A_Cord will be the same index B_Cord in the prev array
      * @param fos Boolean value of _fragmentsOnSide
      */
-    function _getPrevSection(top, fos) {
+    function _getPrevA_Cord(top, fos) {
       var sub = sp;
       //
       var toTop = _isOverview === true ? false : top;
@@ -408,34 +408,34 @@ var Flowtime = (function ()
         }
         var pTemp = Math.max(p - 1, 0);
         if (_isLoopable === true && pTemp === p) {
-          p = sectionsArray.length - 1;
+          p = A_CordsArray.length - 1;
         } else {
           p = pTemp;
         }
         //
         if (!_isOverview) {
-          if (_rememberSectionsStatus === true && _sectionsStatus[p] >= 0) {
-            sub = _sectionsStatus[p];
+          if (_rememberA_CordsStatus === true && _A_CordsStatus[p] >= 0) {
+            sub = _A_CordsStatus[p];
           }
           //
-          if (_rememberSectionsLastPage === true) {
-            sub = _sectionsLastPageDepth;
+          if (_rememberA_CordsLastB_Cord === true) {
+            sub = _A_CordsLastB_CordDepth;
           }
         }
         //
-        return _getNearestPage(sectionsArray[p], sub);
+        return _getNearestB_Cord(A_CordsArray[p], sub);
       }
-      return hiliteOrNavigate(sectionsArray[p][sp]);
+      return hiliteOrNavigate(A_CordsArray[p][sp]);
     }
 
     /**
-     * checks if there is a valid page in the current section array
-     * if the passed page is not valid the check which is the first valid page in the array
-     * then returns the page
-     * @param p Number  the section index in the sections array
-     * @param sub Number  the page index in the sections->page array
+     * checks if there is a valid B_Cord in the current A_Cord array
+     * if the passed B_Cord is not valid the check which is the first valid B_Cord in the array
+     * then returns the B_Cord
+     * @param p Number  the A_Cord index in the A_Cords array
+     * @param sub Number  the B_Cord index in the A_Cords->B_Cord array
      */
-    function _getNearestPage(pg, sub) {
+    function _getNearestB_Cord(pg, sub) {
       var nsp = pg[sub];
       if (nsp === undefined) {
         if (_nearestToTop === true) {
@@ -459,68 +459,68 @@ var Flowtime = (function ()
     }
 
     /**
-     * returns the next page in navigation
-     * if the next page is not in the current section array returns the first page in the next section array
-     * if _toSectionsFromPages is false and the next page is not in the current section then returns false
-     * @param jump  Boolean if true jumps over the fragments directly to the next page
+     * returns the next B_Cord in navigation
+     * if the next B_Cord is not in the current A_Cord array returns the first B_Cord in the next A_Cord array
+     * if _toA_CordsFromB_Cords is false and the next B_Cord is not in the current A_Cord then returns false
+     * @param jump  Boolean if true jumps over the fragments directly to the next B_Cord
      */
-    function _getNextPage(jump) {
+    function _getNextB_Cord(jump) {
       if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && _isOverview === false) {
         _showFragment(p, sp);
       } else {
-        if (sectionsArray[p][sp + 1] === undefined) {
-          if (_toSectionsFromPages === false) {
+        if (A_CordsArray[p][sp + 1] === undefined) {
+          if (_toA_CordsFromB_Cords === false) {
             return false;
-          } else if (sectionsArray[p + 1] !== undefined) {
+          } else if (A_CordsArray[p + 1] !== undefined) {
             p += 1;
             sp = 0;
-          } else if (sectionsArray[p + 1] === undefined && _isLoopable === true) {
+          } else if (A_CordsArray[p + 1] === undefined && _isLoopable === true) {
             p = 0;
             sp = 0;
           }
         } else {
-          sp = Math.min(sp + 1, sectionsArray[p].length - 1);
+          sp = Math.min(sp + 1, A_CordsArray[p].length - 1);
         }
       }
-      return hiliteOrNavigate(sectionsArray[p][sp]);
+      return hiliteOrNavigate(A_CordsArray[p][sp]);
     }
 
     /**
-     * returns the prev page in navigation
-     * if the prev page is not in the current section array returns the last page in the prev section array
-     * if _toSectionsFromPages is false and the prev page is not in the current section then returns false
-     * @param jump  Boolean if true jumps over the fragments directly to the prev page
+     * returns the prev B_Cord in navigation
+     * if the prev B_Cord is not in the current A_Cord array returns the last B_Cord in the prev A_Cord array
+     * if _toA_CordsFromB_Cords is false and the prev B_Cord is not in the current A_Cord then returns false
+     * @param jump  Boolean if true jumps over the fragments directly to the prev B_Cord
      */
-    function _getPrevPage(jump) {
+    function _getPrevB_Cord(jump) {
       if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
         if (sp === 0) {
-          if (_toSectionsFromPages === false) {
+          if (_toA_CordsFromB_Cords === false) {
             return false;
-          } else if (sectionsArray[p - 1] !== undefined) {
+          } else if (A_CordsArray[p - 1] !== undefined) {
             p -= 1;
-            sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
-          } else if (sectionsArray[p - 1] === undefined && _isLoopable === true) {
-            p = sectionsArray.length - 1;
-            sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
+            sp = _backFromB_CordToTop === true ? 0 : A_CordsArray[p].length - 1;
+          } else if (A_CordsArray[p - 1] === undefined && _isLoopable === true) {
+            p = A_CordsArray.length - 1;
+            sp = _backFromB_CordToTop === true ? 0 : A_CordsArray[p].length - 1;
           }
         } else {
           sp = Math.max(sp - 1, 0);
         }
       }
-      return hiliteOrNavigate(sectionsArray[p][sp]);
+      return hiliteOrNavigate(A_CordsArray[p][sp]);
     }
 
     /**
-     * returns the destination page or
+     * returns the destination B_Cord or
      * if the application is in overview mode
-     * switch the active page without returning a destination
+     * switch the active B_Cord without returning a destination
      * @param d HTMLElement the candidate destination
      */
     function hiliteOrNavigate(d) {
       if (_isOverview === true) {
-        _switchActivePage(d);
+        _switchActiveB_Cord(d);
         return;
       } else {
         return d;
@@ -528,11 +528,11 @@ var Flowtime = (function ()
     }
 
     /**
-     * show a single fragment inside the specified section / page
+     * show a single fragment inside the specified A_Cord / B_Cord
      * the fragment index parameter is optional, if passed force the specified fragment to show
      * otherwise the method shows the current fragment
-     * @param fp  Number  the section index
-     * @param fsp Number  the page index
+     * @param fp  Number  the A_Cord index
+     * @param fsp Number  the B_Cord index
      * @param f Number  the fragment index (optional)
      */
     function _showFragment(fp, fsp, f) {
@@ -550,11 +550,11 @@ var Flowtime = (function ()
     }
 
     /**
-     * hide a single fragment inside the specified section / page
+     * hide a single fragment inside the specified A_Cord / B_Cord
      * the fragment index parameter is optional, if passed force the specified fragment to hide
      * otherwise the method hides the current fragment
-     * @param fp  Number  the section index
-     * @param fsp Number  the page index
+     * @param fp  Number  the A_Cord index
+     * @param fsp Number  the B_Cord index
      * @param f Number  the fragment index (optional)
      */
     function _hideFragment(fp, fsp, f) {
@@ -578,7 +578,7 @@ var Flowtime = (function ()
     }
 
     /**
-     * show all the fragments or the fragments in the specified page
+     * show all the fragments or the fragments in the specified B_Cord
      * adds a temporary class which does not override the current status of fragments
      */
     function _showFragments() {
@@ -588,7 +588,7 @@ var Flowtime = (function ()
     }
 
     /**
-     * hide all the fragments or the fragments in the specified page
+     * hide all the fragments or the fragments in the specified B_Cord
      * removes a temporary class which does not override the current status of fragments
      */
     function _hideFragments() {
@@ -610,7 +610,7 @@ var Flowtime = (function ()
             // there are fragments
             if (ip > p)
             {
-              // previous section
+              // previous A_Cord
               for (f = frsp.length - 1; f >= 0; f--)
               {
                 _hideFragment(ip, isp, f);
@@ -618,7 +618,7 @@ var Flowtime = (function ()
             }
             else if (ip < p)
             {
-              // next section
+              // next A_Cord
               for (f = 0; f < frsp.length; f++)
               {
                 _showFragment(ip, isp, f);
@@ -626,10 +626,10 @@ var Flowtime = (function ()
             }
             else if (ip == p)
             {
-              // same section
+              // same A_Cord
               if (isp > sp)
               {
-                // previous page
+                // previous B_Cord
                 for (f = frsp.length - 1; f >= 0; f--)
                 {
                   _hideFragment(ip, isp, f);
@@ -637,7 +637,7 @@ var Flowtime = (function ()
               }
               else if (isp < sp)
               {
-                // next page
+                // next B_Cord
                 for (f = 0; f < frsp.length; f++)
                 {
                   _showFragment(ip, isp, f);
@@ -645,8 +645,8 @@ var Flowtime = (function ()
               }
               else if (isp == sp)
               {
-                // same page
-                if (_fragmentsOnBack === true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
+                // same B_Cord
+                if (_fragmentsOnBack === true && (pastIndex.A_Cord > NavigationMatrix.getB_CordIndex().A_Cord || pastIndex.B_Cord > NavigationMatrix.getB_CordIndex().B_Cord))
                 {
                   for (f = 0; f < frsp.length; f++)
                   {
@@ -666,7 +666,7 @@ var Flowtime = (function ()
                 }
                 else
                 {
-                  if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
+                  if (pastIndex.A_Cord > NavigationMatrix.getB_CordIndex().A_Cord || pastIndex.B_Cord > NavigationMatrix.getB_CordIndex().B_Cord)
                   {
                     fr[ip][isp] = frsp.length - 1;
                   }
@@ -683,194 +683,194 @@ var Flowtime = (function ()
     }
 
     /**
-     * returns the current section index
+     * returns the current A_Cord index
      */
-    function _getSection(h) {
+    function _getA_Cord(h) {
       if (h) {
-        // TODO return the index of the section by hash
+        // TODO return the index of the A_Cord by hash
       }
       return p;
     }
 
     /**
-     * returns the current page index
+     * returns the current B_Cord index
      */
-    function _getPage(h) {
+    function _getB_Cord(h) {
       if (h) {
-        // TODO return the index of the page by hash
+        // TODO return the index of the B_Cord by hash
       }
       return sp;
     }
 
     /**
-     * returns the sections collection
+     * returns the A_Cords collection
      */
-     function _getSections() {
-      return sections;
+     function _getA_Cords() {
+      return A_Cords;
      }
 
     /**
-     * returns the pages collection inside the passed section index
+     * returns the B_Cords collection inside the passed A_Cord index
      */
-     function _getPages(i) {
-      return sectionsArray[i];
+     function _getB_Cords(i) {
+      return A_CordsArray[i];
      }
 
     /**
-     * returns the pages collection of all pages in the presentation
+     * returns the B_Cords collection of all B_Cords in the presentation
      */
-    function _getAllPages() {
-      return allPages;
+    function _getAllB_Cords() {
+      return allB_Cords;
     }
 
     /**
-     * returns the number of pages in the specified section
+     * returns the number of B_Cords in the specified A_Cord
      */
-    function _getSectionLength(i) {
-      return sectionsArray[i].length;
+    function _getA_CordLength(i) {
+      return A_CordsArray[i].length;
     }
 
     /**
-     * returns the number of sections
+     * returns the number of A_Cords
      */
-    function _getSectionsLength() {
-      return sectionsLength;
+    function _getA_CordsLength() {
+      return A_CordsLength;
     }
 
     /**
-     * returns the max number of pages
+     * returns the max number of B_Cords
      */
-    function _getPagesLength() {
-      return pagesLength;
+    function _getB_CordsLength() {
+      return B_CordsLength;
     }
 
     /**
-     * returns the total number of pages
+     * returns the total number of B_Cords
      */
-    function _getPagesTotalLength() {
-      return pagesTotalLength;
+    function _getB_CordsTotalLength() {
+      return B_CordsTotalLength;
     }
 
     /**
-     * returns a object with the index of the current section and page
+     * returns a object with the index of the current A_Cord and B_Cord
      */
-    function _getPageIndex(d) {
+    function _getB_CordIndex(d) {
       var pIndex = p;
       var spIndex = sp;
       if (d !== undefined) {
         pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
         spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
       }
-      return { section: pIndex, page: spIndex };
+      return { A_Cord: pIndex, B_Cord: spIndex };
     }
 
-    function _getSectionByIndex(i) {
-      return sections[i];
+    function _getA_CordByIndex(i) {
+      return A_Cords[i];
     }
 
-    function _getPageByIndex(i, pi) {
-      return sectionsArray[pi][i];
+    function _getB_CordByIndex(i, pi) {
+      return A_CordsArray[pi][i];
     }
 
-    function _getCurrentSection() {
-      return sections[p];
+    function _getCurrentA_Cord() {
+      return A_Cords[p];
     }
 
-    function _getCurrentPage() {
-      return sectionsArray[p][sp];
+    function _getCurrentB_Cord() {
+      return A_CordsArray[p][sp];
     }
 
     /**
-     * returns the previous section element
-     * if the presentation is loopable and the current section is the first
-     * return the last section
-     * @return {HTMLElement} the previous section element
+     * returns the previous A_Cord element
+     * if the presentation is loopable and the current A_Cord is the first
+     * return the last A_Cord
+     * @return {HTMLElement} the previous A_Cord element
      */
-    function _getPrevSectionIndex() {
-      var sectionIndex = p-1;
-      if (sectionIndex < 0) {
+    function _getPrevA_CordIndex() {
+      var A_CordIndex = p-1;
+      if (A_CordIndex < 0) {
         if (_isLoopable === true) {
-          sectionIndex = sectionsArray.length-1;
+          A_CordIndex = A_CordsArray.length-1;
         } else {
           return null;
         }
       }
-      return sectionIndex;
+      return A_CordIndex;
     }
 
-    function _getPrevSectionObject() {
-      var sectionIndex = _getPrevSectionIndex();
-      if (sectionIndex === null) {
+    function _getPrevA_CordObject() {
+      var A_CordIndex = _getPrevA_CordIndex();
+      if (A_CordIndex === null) {
         return null;
       }
-      return sections[sectionIndex];
+      return A_Cords[A_CordIndex];
     }
 
-    function _getPrevPageObject() {
-      var pageIndex = sp-1;
-      // the page is in the previous section
-      if (pageIndex < 0) {
-        // the section is the first and the presentation can loop
+    function _getPrevB_CordObject() {
+      var B_CordIndex = sp-1;
+      // the B_Cord is in the previous A_Cord
+      if (B_CordIndex < 0) {
+        // the A_Cord is the first and the presentation can loop
         if (p === 0 && _isLoopable) {
-          // get the last page of the last section
-          var sectionIndex = sectionsArray.length-1;
-          return sectionsArray[sectionIndex][sectionsArray[sectionIndex].length-1];
+          // get the last B_Cord of the last A_Cord
+          var A_CordIndex = A_CordsArray.length-1;
+          return A_CordsArray[A_CordIndex][A_CordsArray[A_CordIndex].length-1];
         } else if (p > 0) {
-          // get the last page of the previous section
-          return sectionsArray[p-1][sectionsArray[p-1].length-1];
+          // get the last B_Cord of the previous A_Cord
+          return A_CordsArray[p-1][A_CordsArray[p-1].length-1];
         } else {
-          // there's not a previous page
+          // there's not a previous B_Cord
           return null;
         }
       }
-      // get the previous pages
-      return sectionsArray[p][pageIndex];
+      // get the previous B_Cords
+      return A_CordsArray[p][B_CordIndex];
     }
 
     /**
-     * returns the next section element
-     * if the presentation is loopable and the current section is the last
-     * return the first section
-     * @return {HTMLElement} the next section element
+     * returns the next A_Cord element
+     * if the presentation is loopable and the current A_Cord is the last
+     * return the first A_Cord
+     * @return {HTMLElement} the next A_Cord element
      */
-    function _getNextSectionIndex() {
-      var sectionIndex = p+1;
-      if (sectionIndex > sectionsArray.length-1) {
+    function _getNextA_CordIndex() {
+      var A_CordIndex = p+1;
+      if (A_CordIndex > A_CordsArray.length-1) {
         if (_isLoopable === true) {
-          sectionIndex = 0;
+          A_CordIndex = 0;
         } else {
           return null;
         }
       }
-      return sectionIndex;
+      return A_CordIndex;
     }
 
-    function _getNextSectionObject() {
-      var sectionIndex = _getNextSectionIndex();
-      if (sectionIndex === null) {
+    function _getNextA_CordObject() {
+      var A_CordIndex = _getNextA_CordIndex();
+      if (A_CordIndex === null) {
         return null;
       }
-      return sections[sectionIndex];
+      return A_Cords[A_CordIndex];
     }
 
-    function _getNextPageObject() {
-      var pageIndex = sp+1;
-      // the page is in the next section
-      if (pageIndex > sectionsArray[p].length-1) {
-        // the section is the last and the presentation can loop
-        if (p === sectionsArray.length-1 && _isLoopable) {
-          // get the first page of the first section
-          return sectionsArray[0][0];
-        } else if (p < sectionsArray.length-1) {
-          // get the first page of the next section
-          return sectionsArray[p+1][0];
+    function _getNextB_CordObject() {
+      var B_CordIndex = sp+1;
+      // the B_Cord is in the next A_Cord
+      if (B_CordIndex > A_CordsArray[p].length-1) {
+        // the A_Cord is the last and the presentation can loop
+        if (p === A_CordsArray.length-1 && _isLoopable) {
+          // get the first B_Cord of the first A_Cord
+          return A_CordsArray[0][0];
+        } else if (p < A_CordsArray.length-1) {
+          // get the first B_Cord of the next A_Cord
+          return A_CordsArray[p+1][0];
         } else {
-          // there's not a next page
+          // there's not a next B_Cord
           return null;
         }
       }
-      // get the next pages
-      return sectionsArray[p][pageIndex];
+      // get the next B_Cords
+      return A_CordsArray[p][B_CordIndex];
     }
 
     function _getCurrentFragment() {
@@ -881,24 +881,24 @@ var Flowtime = (function ()
       return fr[p][sp];
     }
 
-    function _hasNextSection() {
-      return p < sections.length - 1;
+    function _hasNextA_Cord() {
+      return p < A_Cords.length - 1;
     }
 
-    function _hasPrevSection() {
+    function _hasPrevA_Cord() {
       return p > 0;
     }
 
-    function _hasNextPage() {
-      return sp < sectionsArray[p].length - 1;
+    function _hasNextB_Cord() {
+      return sp < A_CordsArray[p].length - 1;
     }
 
-    function _hasPrevPage() {
+    function _hasPrevB_Cord() {
       return sp > 0;
     }
 
     /**
-     * get a progress value calculated on the total number of pages
+     * get a progress value calculated on the total number of B_Cords
      */
     function _getProgress() {
       if (p === 0 && sp === 0) {
@@ -906,41 +906,41 @@ var Flowtime = (function ()
       }
       var c = 0;
       for (var i = 0; i < p; i++) {
-        c += sectionsArray[i].length;
+        c += A_CordsArray[i].length;
       }
-      c += sectionsArray[p][sp].index + 1;
+      c += A_CordsArray[p][sp].index + 1;
       return c;
     }
 
     /**
-     * get a composed hash based on current section and page
+     * get a composed hash based on current A_Cord and B_Cord
      */
     function _getHash(d) {
       if (d) {
-        sp = _getPageIndex(d).page;
-        p = _getPageIndex(d).section;
+        sp = _getB_CordIndex(d).B_Cord;
+        p = _getB_CordIndex(d).A_Cord;
       }
       var h = "";
       // append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
-      var _p = sections[p];
-      h += getPageId(_p);
-      if (sectionsArray[p].length > 0) {
-        var _sp = sectionsArray[p][sp];
-        h += "/" + getPageId(_sp);
+      var _p = A_Cords[p];
+      h += getB_CordId(_p);
+      if (A_CordsArray[p].length > 0) {
+        var _sp = A_CordsArray[p][sp];
+        h += "/" + getB_CordId(_sp);
       }
       return h;
     }
 
     /**
-     * expose the method to set the page from a hash
+     * expose the method to set the B_Cord from a hash
      */
-    function _setPage(h) {
+    function _setB_Cord(h) {
       var elem = getElementByHash(h);
       if (elem) {
         var pElem = elem.parentNode;
-        for (var i = 0; i < sectionsArray.length; i++) {
-          var pa = sectionsArray[i];
-          if (sections[i] === pElem) {
+        for (var i = 0; i < A_CordsArray.length; i++) {
+          var pa = A_CordsArray[i];
+          if (A_Cords[i] === pElem) {
             p = i;
             for (var ii = 0; ii < pa.length; ii++) {
               if (pa[ii] === elem) {
@@ -955,32 +955,32 @@ var Flowtime = (function ()
       return elem;
     }
 
-    function _switchActivePage(d, navigate) {
+    function _switchActiveB_Cord(d, navigate) {
       var sIndex = d.parentNode.index;
-      for (var i = 0; i < sectionsArray.length; i++) {
-        var pa = sectionsArray[i];
+      for (var i = 0; i < A_CordsArray.length; i++) {
+        var pa = A_CordsArray[i];
         for (var ii = 0; ii < pa.length; ii++) {
           var spa = pa[ii];
           //
-          Brav1Toolbox.removeClass(spa, "past-section");
-          Brav1Toolbox.removeClass(spa, "future-section");
-          Brav1Toolbox.removeClass(spa, "past-page");
-          Brav1Toolbox.removeClass(spa, "future-page");
+          Brav1Toolbox.removeClass(spa, "past-A_Cord");
+          Brav1Toolbox.removeClass(spa, "future-A_Cord");
+          Brav1Toolbox.removeClass(spa, "past-B_Cord");
+          Brav1Toolbox.removeClass(spa, "future-B_Cord");
           //
           if (spa !== d) {
             Brav1Toolbox.removeClass(spa, "hilite");
-            if (_isOverview === false && spa !== _getCurrentPage()) {
+            if (_isOverview === false && spa !== _getCurrentB_Cord()) {
               Brav1Toolbox.removeClass(spa, "actual");
             }
             if (i < sIndex) {
-              Brav1Toolbox.addClass(spa, "past-section");
+              Brav1Toolbox.addClass(spa, "past-A_Cord");
             } else if (i > sIndex) {
-              Brav1Toolbox.addClass(spa, "future-section");
+              Brav1Toolbox.addClass(spa, "future-A_Cord");
             }
             if (spa.index < d.index) {
-              Brav1Toolbox.addClass(spa, "past-page");
+              Brav1Toolbox.addClass(spa, "past-B_Cord");
             } else if (spa.index > d.index) {
-              Brav1Toolbox.addClass(spa, "future-page");
+              Brav1Toolbox.addClass(spa, "future-B_Cord");
             }
           }
         }
@@ -1007,41 +1007,41 @@ var Flowtime = (function ()
       updateFragments: _updateFragments,
       showFragments: _showFragments,
       hideFragments: _hideFragments,
-      getSection: _getSection,
-      getPage: _getPage,
-      getSections: _getSections,
-      getPages: _getPages,
-      getAllPages: _getAllPages,
-      getNextSection: _getNextSection,
-      getPrevSection: _getPrevSection,
-      getNextPage: _getNextPage,
-      getPrevPage: _getPrevPage,
-      getSectionLength: _getSectionLength,
-      getSectionsLength: _getSectionsLength,
-      getPagesLength: _getPagesLength,
-      getPagesTotalLength: _getPagesTotalLength,
-      getPageIndex: _getPageIndex,
-      getSectionByIndex: _getSectionByIndex,
-      getPageByIndex: _getPageByIndex,
-      getCurrentSection: _getCurrentSection,
-      getCurrentPage: _getCurrentPage,
+      getA_Cord: _getA_Cord,
+      getB_Cord: _getB_Cord,
+      getA_Cords: _getA_Cords,
+      getB_Cords: _getB_Cords,
+      getAllB_Cords: _getAllB_Cords,
+      getNextA_Cord: _getNextA_Cord,
+      getPrevA_Cord: _getPrevA_Cord,
+      getNextB_Cord: _getNextB_Cord,
+      getPrevB_Cord: _getPrevB_Cord,
+      getA_CordLength: _getA_CordLength,
+      getA_CordsLength: _getA_CordsLength,
+      getB_CordsLength: _getB_CordsLength,
+      getB_CordsTotalLength: _getB_CordsTotalLength,
+      getB_CordIndex: _getB_CordIndex,
+      getA_CordByIndex: _getA_CordByIndex,
+      getB_CordByIndex: _getB_CordByIndex,
+      getCurrentA_Cord: _getCurrentA_Cord,
+      getCurrentB_Cord: _getCurrentB_Cord,
 
-      getPrevSectionObject: _getPrevSectionObject,
-      getPrevPageObject: _getPrevPageObject,
-      getNextSectionObject: _getNextSectionObject,
-      getNextPageObject: _getNextPageObject,
+      getPrevA_CordObject: _getPrevA_CordObject,
+      getPrevB_CordObject: _getPrevB_CordObject,
+      getNextA_CordObject: _getNextA_CordObject,
+      getNextB_CordObject: _getNextB_CordObject,
 
       getCurrentFragment: _getCurrentFragment,
       getCurrentFragmentIndex: _getCurrentFragmentIndex,
       getProgress: _getProgress,
       getHash: _getHash,
-      setPage: _setPage,
-      switchActivePage: _switchActivePage,
+      setB_Cord: _setB_Cord,
+      switchActiveB_Cord: _switchActiveB_Cord,
       getCurrentHilited: _getCurrentHilited,
-      hasNextSection: _hasNextSection,
-      hasPrevSection: _hasPrevSection,
-      hasNextPage: _hasNextPage,
-      hasPrevPage: _hasPrevPage,
+      hasNextA_Cord: _hasNextA_Cord,
+      hasPrevA_Cord: _hasPrevA_Cord,
+      hasNextB_Cord: _hasNextB_Cord,
+      hasPrevB_Cord: _hasPrevB_Cord,
       updateOffsets: _updateOffsets,
       getParallaxElements: _getParallaxElements
     };
@@ -1083,28 +1083,28 @@ var Flowtime = (function ()
           e.target.blur();
           if (href.substr(0,1) == "#") {
             e.preventDefault();
-            var dest = NavigationMatrix.setPage(href);
+            var dest = NavigationMatrix.setB_Cord(href);
             navigateTo(dest, true, true);
           }
         }
       }
-      // pages in oveview mode
+      // B_Cords in oveview mode
       if (_isOverview) {
         var target = e.target;
-        while (target && !Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
+        while (target && !Brav1Toolbox.hasClass(target, B_CORD_CLASS)) {
           target = target.parentNode;
         }
-        if (Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
+        if (Brav1Toolbox.hasClass(target, B_CORD_CLASS)) {
           e.preventDefault();
           navigateTo(target, null, true);
         }
       }
       // thumbs in the default progress indicator
-      if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS)) {
+      if (Brav1Toolbox.hasClass(e.target, B_CORD_THUMB_CLASS)) {
         e.preventDefault();
-        var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
-        var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
-        _gotoPage(pTo, spTo);
+        var pTo = Number(unsafeAttr(e.target.getAttribute("data-A_Cord")));
+        var spTo = Number(unsafeAttr(e.target.getAttribute("data-B_Cord")));
+        _gotoB_Cord(pTo, spTo);
       }
     }
   }
@@ -1129,7 +1129,7 @@ var Flowtime = (function ()
     } else {
       h = document.location.hash.replace("#/", "");
     }
-    var dest = NavigationMatrix.setPage(h);
+    var dest = NavigationMatrix.setB_Cord(h);
     navigateTo(dest, false);
   }
 
@@ -1147,7 +1147,7 @@ var Flowtime = (function ()
   function onHashChange(e, d) {
     if (useHash || d) {
       var h = document.location.hash.replace("#/", "");
-      var dest = NavigationMatrix.setPage(h);
+      var dest = NavigationMatrix.setB_Cord(h);
       navigateTo(dest, false);
     }
   }
@@ -1231,16 +1231,16 @@ var Flowtime = (function ()
         if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit) {
           if (_deltaX > 0) {
             if (_crossDirection === true) {
-              _prevPage();
+              _prevB_Cord();
             } else {
-              _prevSection(undefined, false);
+              _prevA_Cord(undefined, false);
             }
             return;
           } else if (_deltaX < 0) {
             if (_crossDirection === true) {
-              _nextPage();
+              _nextB_Cord();
             } else {
-              _nextSection(undefined, false);
+              _nextA_Cord(undefined, false);
             }
             return;
           }
@@ -1248,16 +1248,16 @@ var Flowtime = (function ()
         else {
           if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit) {
             if (_crossDirection === true) {
-              _prevSection(undefined, false);
+              _prevA_Cord(undefined, false);
             } else {
-              _prevPage();
+              _prevB_Cord();
             }
             return;
           } else if (_deltaY < 0) {
             if (_crossDirection === true) {
-              _nextSection(undefined, false);
+              _nextA_Cord(undefined, false);
             } else {
-              _nextPage();
+              _nextB_Cord();
             }
             return;
           }
@@ -1337,13 +1337,13 @@ var Flowtime = (function ()
   function checkIfScrollable(element) {
     var isScrollable = false;
     var el = element;
-    while (el.className && el.className.indexOf("ft-page") < 0) {
+    while (el.className && el.className.indexOf("ft-B") < 0) {
       if (el.scrollHeight > el.clientHeight - 1) {
         isScrollable = true;
       }
       el = el.parentNode;
     }
-    if (el.className.indexOf("ft-page") != -1 && el.scrollHeight > el.clientHeight - 1) {
+    if (el.className.indexOf("ft-B") != -1 && el.scrollHeight > el.clientHeight - 1) {
       isScrollable = true;
     }
     if (isScrollable === true) {
@@ -1372,29 +1372,29 @@ var Flowtime = (function ()
     if (e.deltaY === 0) {
       if (e.deltaX > 0) {
         if (_crossDirection === true) {
-          _nextPage();
+          _nextB_Cord();
         } else {
-          _nextSection(undefined, e.shiftKey);
+          _nextA_Cord(undefined, e.shiftKey);
         }
       } else if (e.deltaX < 0) {
         if (_crossDirection === true) {
-          _prevPage();
+          _prevB_Cord();
         } else {
-          _prevSection(undefined, e.shiftKey);
+          _prevA_Cord(undefined, e.shiftKey);
         }
       }
     } else {
       if (e.deltaY > 0) {
         if (_crossDirection === true) {
-          _nextSection(undefined, e.shiftKey);
+          _nextA_Cord(undefined, e.shiftKey);
         } else {
-          _nextPage();
+          _nextB_Cord();
         }
       } else if (e.deltaY < 0) {
         if (_crossDirection === true) {
-          _prevSection(undefined, e.shiftKey);
+          _prevA_Cord(undefined, e.shiftKey);
         } else {
-          _prevPage();
+          _prevB_Cord();
         }
       }
     }
@@ -1458,23 +1458,23 @@ var Flowtime = (function ()
     if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
       if (aHash.length > 0) {
-        var dataProgSection = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
-        var dataIdSection = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]");
-        var ps = dataProgSection.length > 0 ? dataProgSection : dataIdSection;
+        var dataProgA_Cord = document.querySelectorAll(A_CORD_SELECTOR + "[data-prog=__" + aHash[0] + "]");
+        var dataIdA_Cord = document.querySelectorAll(A_CORD_SELECTOR + "[data-id=__" + aHash[0] + "]");
+        var ps = dataProgA_Cord.length > 0 ? dataProgA_Cord : dataIdA_Cord;
         var sp = null;
         var p = null;
         if (ps !== null) {
           for (var i = 0; i < ps.length; i++) {
             p = ps[i];
             if (aHash.length > 1) {
-              sp = p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]");
+              sp = p.querySelector(B_CORD_SELECTOR + "[data-prog=__" + aHash[1] + "]") || p.querySelector(B_CORD_SELECTOR + "[data-id=__" + aHash[1] + "]");
             }
             if (sp !== null) {
               break;
             }
           }
           if (sp === null && p) {
-            sp = p.querySelector(PAGE_SELECTOR);
+            sp = p.querySelector(B_CORD_SELECTOR);
           }
         }
         return sp;
@@ -1498,31 +1498,31 @@ var Flowtime = (function ()
    */
   function _updateNavigation(fireEvent) {
     _fireEvent = fireEvent === false ? false : true;
-    var currentPagePreUpdate = NavigationMatrix.getCurrentPage();
+    var currentB_CordPreUpdate = NavigationMatrix.getCurrentB_Cord();
     NavigationMatrix.update();
     //
-    navigateTo(currentPagePreUpdate, false, false, false);
+    navigateTo(currentB_CordPreUpdate, false, false, false);
     if (_showProgress === true) {
       buildProgressIndicator();
     }
   }
 
   /**
-   * builds and sets the title of the document parsing the attributes of the current section
-   * if a data-title is available in a page and or in a section then it will be used
+   * builds and sets the title of the document parsing the attributes of the current A_Cord
+   * if a data-title is available in a B_Cord and or in a A_Cord then it will be used
    * otherwise it will be used a formatted version of the hash string
    */
   function setTitle(h) {
     var t = siteName;
-    var ht = NavigationMatrix.getCurrentPage().getAttribute("data-title");
+    var ht = NavigationMatrix.getCurrentB_Cord().getAttribute("data-title");
     if (ht === null) {
       var hs = h.split("/");
       for (var i = 0; i < hs.length; i++) {
         t += " | " + hs[i];
       }
     } else {
-      if (NavigationMatrix.getCurrentSection().getAttribute("data-title") !== null) {
-        t += " | " + NavigationMatrix.getCurrentSection().getAttribute("data-title");
+      if (NavigationMatrix.getCurrentA_Cord().getAttribute("data-title") !== null) {
+        t += " | " + NavigationMatrix.getCurrentA_Cord().getAttribute("data-title");
       }
       t += " | " + ht;
     }
@@ -1530,11 +1530,11 @@ var Flowtime = (function ()
   }
 
   /**
-   * returns a clean string of navigation atributes of the passed page
+   * returns a clean string of navigation atributes of the passed B_Cord
    * if there is a data-id attribute it will be returned
    * otherwise will be returned the data-prog attribute
    */
-  function getPageId(d) {
+  function getB_CordId(d) {
     var tempId = d.getAttribute("data-id");
     var tempProg = d.getAttribute("data-prog");
     var ret = "";
@@ -1582,19 +1582,19 @@ var Flowtime = (function ()
 
   /**
    * navigation transition logic
-   * @param dest HTMLElement  the page to go to
+   * @param dest HTMLElement  the B_Cord to go to
    * @param push Boolean if true the hash string were pushed to the history API
-   * @param linked Boolean if true triggers a forced update of all the fragments in the pages, used when navigating from links or overview
+   * @param linked Boolean if true triggers a forced update of all the fragments in the B_Cords, used when navigating from links or overview
    * @param withTransitions Boolean if false disables the transition during the current navigation, then reset the transitions
    */
   function navigateTo(dest, push, linked, withTransitions) {
     push = push === false ? push : true;
-    // if dest doesn't exist then go to homepage
+    // if dest doesn't exist then go to homeB_Cord
     if (!dest) {
-      if (NavigationMatrix.getCurrentPage() !== null) {
-        dest = NavigationMatrix.getCurrentPage();
+      if (NavigationMatrix.getCurrentB_Cord() !== null) {
+        dest = NavigationMatrix.getCurrentB_Cord();
       } else {
-        dest = document.querySelector(PAGE_SELECTOR);
+        dest = document.querySelector(B_CORD_SELECTOR);
       }
       push = true;
     }
@@ -1620,8 +1620,8 @@ var Flowtime = (function ()
       NavigationMatrix.updateFragments();
     }
     // set history properties
-    var pageIndex = NavigationMatrix.getPageIndex(dest);
-    if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page) {
+    var B_CordIndex = NavigationMatrix.getB_CordIndex(dest);
+    if (pastIndex.A_Cord != B_CordIndex.A_Cord || pastIndex.B_Cord != B_CordIndex.B_Cord) {
       if (pushHistory !== null && push !== false && NavigationMatrix.getCurrentFragmentIndex() === -1) {
         var stateObj = { token: h };
         var nextHash = "#/" + h;
@@ -1641,19 +1641,19 @@ var Flowtime = (function ()
     setTitle(h);
     //
 
-    // store the status of the section, the last page visited in the section
-    _sectionsStatus[pageIndex.section] = pageIndex.page;
+    // store the status of the A_Cord, the last B_Cord visited in the A_Cord
+    _A_CordsStatus[B_CordIndex.A_Cord] = B_CordIndex.B_Cord;
 
-    // store the last page index visited using up or down only if the section have the same number of pages or more
-    if (pastIndex.section === pageIndex.section && pastIndex.page !== pageIndex.page) {
-      _sectionsLastPageDepth = pageIndex.page;
+    // store the last B_Cord index visited using up or down only if the A_Cord have the same number of B_Cords or more
+    if (pastIndex.A_Cord === B_CordIndex.A_Cord && pastIndex.B_Cord !== B_CordIndex.B_Cord) {
+      _A_CordsLastB_CordDepth = B_CordIndex.B_Cord;
     }
 
     // dispatches an event populated with navigation data
     fireNavigationEvent();
-    // cache the section and page index, useful to determine the direction of the next navigation
-    pastIndex = pageIndex;
-    NavigationMatrix.switchActivePage(dest, true);
+    // cache the A_Cord and B_Cord index, useful to determine the direction of the next navigation
+    pastIndex = B_CordIndex;
+    NavigationMatrix.switchActiveB_Cord(dest, true);
     //
     if (_showProgress) {
       updateProgress();
@@ -1666,23 +1666,23 @@ var Flowtime = (function ()
    */
   function fireNavigationEvent() {
     if (_fireEvent !== false) {
-      var pageIndex = NavigationMatrix.getPageIndex();
+      var B_CordIndex = NavigationMatrix.getB_CordIndex();
       var eventData = {
-                        section          : NavigationMatrix.getCurrentSection(),
-                        page             : NavigationMatrix.getCurrentPage(),
-                        sectionIndex     : pageIndex.section,
-                        pageIndex        : pageIndex.page,
-                        pastSectionIndex : pastIndex.section,
-                        pastPageIndex    : pastIndex.page,
-                        prevSection      : NavigationMatrix.hasPrevSection(),
-                        nextSection      : NavigationMatrix.hasNextSection(),
-                        prevPage         : NavigationMatrix.hasPrevPage(),
-                        nextPage         : NavigationMatrix.hasNextPage(),
+                        A_Cord          : NavigationMatrix.getCurrentA_Cord(),
+                        B_Cord             : NavigationMatrix.getCurrentB_Cord(),
+                        A_CordIndex     : B_CordIndex.A_Cord,
+                        B_CordIndex        : B_CordIndex.B_Cord,
+                        pastA_CordIndex : pastIndex.A_Cord,
+                        pastB_CordIndex    : pastIndex.B_Cord,
+                        prevA_Cord      : NavigationMatrix.hasPrevA_Cord(),
+                        nextA_Cord      : NavigationMatrix.hasNextA_Cord(),
+                        prevB_Cord         : NavigationMatrix.hasPrevB_Cord(),
+                        nextB_Cord         : NavigationMatrix.hasNextB_Cord(),
                         fragment         : NavigationMatrix.getCurrentFragment(),
                         fragmentIndex    : NavigationMatrix.getCurrentFragmentIndex(),
                         isOverview       : _isOverview,
                         progress         : NavigationMatrix.getProgress(),
-                        total            : NavigationMatrix.getPagesTotalLength(),
+                        total            : NavigationMatrix.getB_CordsTotalLength(),
                         isLoopable       : _isLoopable,
                         clickerMode      : _clickerMode,
                         isAutoplay       : _isAutoplay
@@ -1714,27 +1714,27 @@ var Flowtime = (function ()
   function navigate(dest) {
     var x;
     var y;
-    var pageIndex = NavigationMatrix.getPageIndex(dest);
+    var B_CordIndex = NavigationMatrix.getB_CordIndex(dest);
     if (_slideInPx === true) {
       // calculate the coordinates of the destination
       x = dest.x;
       y = dest.y;
     } else {
-      // calculate the index of the destination page
+      // calculate the index of the destination B_Cord
       if (_crossDirection === true) {
-        y = pageIndex.section;
-        x = pageIndex.page;
+        y = B_CordIndex.A_Cord;
+        x = B_CordIndex.B_Cord;
       } else {
-        x = pageIndex.section;
-        y = pageIndex.page;
+        x = B_CordIndex.A_Cord;
+        y = B_CordIndex.B_Cord;
       }
     }
-    if (_scrollTheSection === true) {
-      var sectionDest = dest.parentNode;
+    if (_scrollTheA_Cord === true) {
+      var A_CordDest = dest.parentNode;
       var outside = ftContainer;
-      var inside = sectionDest;
+      var inside = A_CordDest;
       if (_crossDirection === true) {
-        outside = sectionDest;
+        outside = A_CordDest;
         inside = ftContainer;
       }
       if (_supportsTransform) {
@@ -1783,29 +1783,29 @@ var Flowtime = (function ()
 
   function moveParallax(dest) {
     if (_parallaxEnabled) {
-      var pageIndex = NavigationMatrix.getPageIndex(dest);
+      var B_CordIndex = NavigationMatrix.getB_CordIndex(dest);
       //
       var pxElements = NavigationMatrix.getParallaxElements();
       for (var i = 0; i < pxElements.length; i++) {
-        var pxSection = pxElements[i];
-        if (pxSection !== undefined) {
-          for (var ii = 0; ii < pxSection.length; ii++) {
-            var pxPage = pxSection[ii];
-            if (pxPage !== undefined) {
-              for (var iii = 0; iii < pxPage.length; iii++) {
-                var pxElement = pxPage[iii];
+        var pxA_Cord = pxElements[i];
+        if (pxA_Cord !== undefined) {
+          for (var ii = 0; ii < pxA_Cord.length; ii++) {
+            var pxB_Cord = pxA_Cord[ii];
+            if (pxB_Cord !== undefined) {
+              for (var iii = 0; iii < pxB_Cord.length; iii++) {
+                var pxElement = pxB_Cord[iii];
                 var pX = 0;
                 var pY = 0;
-                // sections
-                if (pageIndex.section < i) {
+                // A_Cords
+                if (B_CordIndex.A_Cord < i) {
                   pX = pxElement.pX;
-                } else if (pageIndex.section > i) {
+                } else if (B_CordIndex.A_Cord > i) {
                   pX = -pxElement.pX;
                 }
-                // pages
-                if (pageIndex.page < ii) {
+                // B_Cords
+                if (B_CordIndex.B_Cord < ii) {
                   pY = pxElement.pY;
-                } else if (pageIndex.page > ii) {
+                } else if (B_CordIndex.B_Cord > ii) {
                   pY = -pxElement.pY;
                 }
                 // animation
@@ -1827,7 +1827,7 @@ var Flowtime = (function ()
   }
 
   function resetScroll() {
-    window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
+    window.scrollTo(0,0); // fix the eventually occurred B_Cord scrolling resetting the scroll values to 0
   }
 
 /*
@@ -1850,20 +1850,20 @@ var Flowtime = (function ()
     defaultProgress = document.createElement("div");
     defaultProgress.className = DEFAULT_PROGRESS_CLASS + (_crossDirection === true ? " ft-cross" : "");
     domFragment.appendChild(defaultProgress);
-    // loop through sections
-    for (var i = 0; i < NavigationMatrix.getSectionsLength(); i++) {
+    // loop through A_Cords
+    for (var i = 0; i < NavigationMatrix.getA_CordsLength(); i++) {
       var pDiv = document.createElement("div");
-        pDiv.setAttribute("data-section", "__" + i);
-        pDiv.className = SECTION_THUMB_CLASS;
-        Brav1Toolbox.addClass(pDiv, "thumb-section-" + i);
-      // loop through pages
-      var spArray = NavigationMatrix.getPages(i);
+        pDiv.setAttribute("data-A_Cord", "__" + i);
+        pDiv.className = A_CORD_THUMB_CLASS;
+        Brav1Toolbox.addClass(pDiv, "thumb-A_Cord-" + i);
+      // loop through B_Cords
+      var spArray = NavigationMatrix.getB_Cords(i);
       for (var ii = 0; ii < spArray.length; ii++) {
         var spDiv = document.createElement("div");
-          spDiv.className = PAGE_THUMB_CLASS;
-          spDiv.setAttribute("data-section", "__" + i);
-          spDiv.setAttribute("data-page", "__" + ii);
-          Brav1Toolbox.addClass(spDiv, "thumb-page-" + ii);
+          spDiv.className = B_CORD_THUMB_CLASS;
+          spDiv.setAttribute("data-A_Cord", "__" + i);
+          spDiv.setAttribute("data-B_Cord", "__" + ii);
+          Brav1Toolbox.addClass(spDiv, "thumb-B_Cord-" + ii);
           pDiv.appendChild(spDiv);
       }
       defaultProgress.appendChild(pDiv);
@@ -1881,12 +1881,12 @@ var Flowtime = (function ()
 
   function updateProgress() {
     if (defaultProgress !== null) {
-      var spts = defaultProgress.querySelectorAll(PAGE_THUMB_SELECTOR);
+      var spts = defaultProgress.querySelectorAll(B_CORD_THUMB_SELECTOR);
       for (var i = 0; i < spts.length; i++) {
         var spt = spts[i];
-        var pTo = Number(unsafeAttr(spt.getAttribute("data-section")));
-        var spTo = Number(unsafeAttr(spt.getAttribute("data-page")));
-        if (pTo == NavigationMatrix.getPageIndex().section && spTo == NavigationMatrix.getPageIndex().page) {
+        var pTo = Number(unsafeAttr(spt.getAttribute("data-A_Cord")));
+        var spTo = Number(unsafeAttr(spt.getAttribute("data-B_Cord")));
+        if (pTo == NavigationMatrix.getB_CordIndex().A_Cord && spTo == NavigationMatrix.getB_CordIndex().B_Cord) {
           Brav1Toolbox.addClass(spts[i], "actual");
         } else {
           Brav1Toolbox.removeClass(spts[i], "actual");
@@ -1917,7 +1917,7 @@ var Flowtime = (function ()
     if (_isOverview) {
       zoomIn(back, navigate);
     } else {
-      overviewCachedDest = NavigationMatrix.getCurrentPage();
+      overviewCachedDest = NavigationMatrix.getCurrentB_Cord();
       zoomOut();
     }
   }
@@ -1934,7 +1934,7 @@ var Flowtime = (function ()
   }
 
   /**
-   * zoom in the view to focus on the current section / page
+   * zoom in the view to focus on the current A_Cord / B_Cord
    */
   function zoomIn(back, navigate) {
     _isOverview = false;
@@ -1951,7 +1951,7 @@ var Flowtime = (function ()
   }
 
   /**
-   * zoom out the view for an overview of all the sections / pages
+   * zoom out the view for an overview of all the A_Cords / B_Cords
    */
   function zoomOut() {
     _isOverview = true;
@@ -1971,16 +1971,16 @@ var Flowtime = (function ()
     if (out) {
       var scaleX, scaleY;
       if (_crossDirection === true) {
-        scaleY = 100 / NavigationMatrix.getSectionsLength();
-        scaleX = 100 / NavigationMatrix.getPagesLength();
+        scaleY = 100 / NavigationMatrix.getA_CordsLength();
+        scaleX = 100 / NavigationMatrix.getB_CordsLength();
       } else {
-        scaleX = 100 / NavigationMatrix.getSectionsLength();
-        scaleY = 100 / NavigationMatrix.getPagesLength();
+        scaleX = 100 / NavigationMatrix.getA_CordsLength();
+        scaleY = 100 / NavigationMatrix.getB_CordsLength();
       }
       //
       scale = Math.min(scaleX, scaleY) * 0.9;
-      var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
-      var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
+      var offsetX = (100 - NavigationMatrix.getA_CordsLength() * scale) / 2;
+      var offsetY = (100 - NavigationMatrix.getB_CordsLength() * scale) / 2;
       //
       ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
     }
@@ -1990,15 +1990,15 @@ var Flowtime = (function ()
     // ftContainer scale alternative version
     if (out) {
       scale = overviewFixedScaleFactor; // Math.min(scaleX, scaleY) * 0.9;
-      var pIndex = NavigationMatrix.getPageIndex();
+      var pIndex = NavigationMatrix.getB_CordIndex();
       //
       var offsetY, offsetX;
       if (_crossDirection === true) {
-        offsetY = 50 - (scale * pIndex.section) - (scale / 2);
-        offsetX = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.A_Cord) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.B_Cord) - (scale / 2);
       } else {
-        offsetX = 50 - (scale * pIndex.section) - (scale / 2);
-        offsetY = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.A_Cord) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.B_Cord) - (scale / 2);
       }
       //
       ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
@@ -2042,14 +2042,14 @@ var Flowtime = (function ()
             break;
           case 33 : // pag up
             if (_clickerMode) {
-              _prevPage(e.shiftKey);
+              _prevB_Cord(e.shiftKey);
             } else {
               _gotoTop();
             }
             break;
           case 34 : // pag down
             if (_clickerMode) {
-              _nextPage(e.shiftKey);
+              _nextB_Cord(e.shiftKey);
             } else {
               _gotoBottom();
             }
@@ -2062,35 +2062,35 @@ var Flowtime = (function ()
             break;
           case 37 : // left
             if (_crossDirection === true) {
-              _prevPage(e.shiftKey);
+              _prevB_Cord(e.shiftKey);
             } else {
-              _prevSection(null, e.shiftKey);
+              _prevA_Cord(null, e.shiftKey);
             }
             break;
           case 39 : // right
             if (_crossDirection === true) {
-              _nextPage(e.shiftKey);
+              _nextB_Cord(e.shiftKey);
             } else {
-              _nextSection(null, e.shiftKey);
+              _nextA_Cord(null, e.shiftKey);
             }
             break;
           case 38 : // up
             if (_crossDirection === true) {
-              _prevSection(null, e.shiftKey);
+              _prevA_Cord(null, e.shiftKey);
             } else {
-              _prevPage(e.shiftKey);
+              _prevB_Cord(e.shiftKey);
             }
             break;
           case 40 : // down
             if (_crossDirection === true) {
-              _nextSection(null, e.shiftKey);
+              _nextA_Cord(null, e.shiftKey);
             } else {
-              _nextPage(e.shiftKey);
+              _nextB_Cord(e.shiftKey);
             }
             break;
           case 13 : // return
             if (_isOverview) {
-              _gotoPage(NavigationMatrix.getCurrentHilited());
+              _gotoB_Cord(NavigationMatrix.getCurrentHilited());
             }
             break;
           default :
@@ -2121,7 +2121,7 @@ var Flowtime = (function ()
    * @param status  Boolean if true configure the presentation for auto playing
    * @param   delay   Number sets the delay for the autoplay timeout in milliseconds (default 10 seconds)
    * @param   autostart   Boolean if true the autoplay starts right now (default true)
-   * @param   skipFragments   Boolean if true goes to the next page skipping all the fragments (default false)
+   * @param   skipFragments   Boolean if true goes to the next B_Cord skipping all the fragments (default false)
    */
   function _autoplay(status, delay, autostart, skipFragments) {
     autoplayDelay = isNaN(parseInt(delay)) ? autoplayDelay : delay;
@@ -2136,7 +2136,7 @@ var Flowtime = (function ()
     clearTimeout(autoplayTimer);
     autoplayTimerStartedAt = Date.now();
     autoplayTimer = setTimeout(function(){
-      _nextPage(autoplaySkipFragments);
+      _nextB_Cord(autoplaySkipFragments);
       _play();
     }, autoplayDelay - autoplayTimerPausedAt);
     autoplayTimerPausedAt = 0;
@@ -2181,9 +2181,9 @@ var Flowtime = (function ()
       onHashChange(null, true);
     } else {
       if (_start.arguments.length > 0) {
-        _gotoPage.apply(this, _start.arguments);
+        _gotoB_Cord.apply(this, _start.arguments);
       } else {
-        _gotoPage(0,0);
+        _gotoB_Cord(0,0);
         updateProgress();
       }
     }
@@ -2210,16 +2210,16 @@ var Flowtime = (function ()
   }
 
   /*
-   * Public API to go to the next section
-   * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
+   * Public API to go to the next A_Cord
+   * @param top Boolean if true the next A_Cord will be the first B_Cord in the next array; if false the next A_Cord will be the same index B_Cord in the next array
    */
-  function _nextSection(top, alternate) {
-    if (_sectionNavigationNext === true) {
+  function _nextA_Cord(top, alternate) {
+    if (_A_CordNavigationNext === true) {
       top = top !== null ? top : _gridNavigation;
       if (alternate === true) {
         top = !_gridNavigation;
       }
-      var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
+      var d = NavigationMatrix.getNextA_Cord(top, _fragmentsOnSide);
       if (d !== undefined) {
         navigateTo(d);
       } else {
@@ -2231,16 +2231,16 @@ var Flowtime = (function ()
   }
 
   /*
-   * Public API to go to the prev section
+   * Public API to go to the prev A_Cord
    *
    */
-  function _prevSection(top, alternate) {
-    if (_sectionNavigationPrev === true) {
+  function _prevA_Cord(top, alternate) {
+    if (_A_CordNavigationPrev === true) {
       top = top !== null ? top : _gridNavigation;
       if (alternate === true) {
         top = !_gridNavigation;
       }
-      var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
+      var d = NavigationMatrix.getPrevA_Cord(top, _fragmentsOnSide);
       if (d !== undefined) {
         navigateTo(d);
       } else {
@@ -2252,11 +2252,11 @@ var Flowtime = (function ()
   }
 
   /*
-   * Public API to go to the next page
+   * Public API to go to the next B_Cord
    */
-  function _nextPage(jump) {
-    if (_pageNavigationNext === true) {
-      var d = NavigationMatrix.getNextPage(jump);
+  function _nextB_Cord(jump) {
+    if (_B_CordNavigationNext === true) {
+      var d = NavigationMatrix.getNextB_Cord(jump);
       if (d === false) {
         return;
       }
@@ -2271,11 +2271,11 @@ var Flowtime = (function ()
   }
 
   /*
-   * Public API to go to the prev page
+   * Public API to go to the prev B_Cord
    */
-  function _prevPage(jump) {
-    if (_pageNavigationPrev === true) {
-      var d = NavigationMatrix.getPrevPage(jump);
+  function _prevB_Cord(jump) {
+    if (_B_CordNavigationPrev === true) {
+      var d = NavigationMatrix.getPrevB_Cord(jump);
       if (d === false) {
         return;
       }
@@ -2290,25 +2290,25 @@ var Flowtime = (function ()
   }
 
   /*
-   * Public API to go to a specified section / page
+   * Public API to go to a specified A_Cord / B_Cord
    * the method accepts vary parameters:
-   * if two numbers were passed it assumes that the first is the section index and the second is the page index;
-   * if an object is passed it assumes that the object has a section property and a page property to get the indexes to navigate;
-   * if an HTMLElement is passed it assumes the element is a destination page
+   * if two numbers were passed it assumes that the first is the A_Cord index and the second is the B_Cord index;
+   * if an object is passed it assumes that the object has a A_Cord property and a B_Cord property to get the indexes to navigate;
+   * if an HTMLElement is passed it assumes the element is a destination B_Cord
    */
-  function _gotoPage() {
-    var args = _gotoPage.arguments;
+  function _gotoB_Cord() {
+    var args = _gotoB_Cord.arguments;
     if (args.length > 0) {
       var spd = null;
       if (args.length == 1) {
         if (Brav1Toolbox.typeOf(args[0]) === "Object") {
           var o = args[0];
-          var p = o.section;
-          var sp = o.page;
+          var p = o.A_Cord;
+          var sp = o.B_Cord;
           if (p !== null && p !== undefined) {
-            var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
+            var pd = document.querySelector(A_CORD_SELECTOR + "[data-id=" + safeAttr(p) + "]");
             if (sp !== null && sp !== undefined) {
-              spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
+              spd = pd.querySelector(B_CORD_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
               if (spd !== null) {
                 navigateTo(spd);
                 return;
@@ -2320,7 +2320,7 @@ var Flowtime = (function ()
         }
       }
       if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0) {
-        spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
+        spd = NavigationMatrix.getB_CordByIndex(args[1], args[0]);
         navigateTo(spd);
         return;
       }
@@ -2328,25 +2328,25 @@ var Flowtime = (function ()
   }
 
   function _gotoHome() {
-    _gotoPage(0,0);
+    _gotoB_Cord(0,0);
   }
 
   function _gotoEnd() {
-    var sl = NavigationMatrix.getSectionsLength() - 1;
-    _gotoPage(sl, NavigationMatrix.getPages(sl).length - 1);
+    var sl = NavigationMatrix.getA_CordsLength() - 1;
+    _gotoB_Cord(sl, NavigationMatrix.getB_Cords(sl).length - 1);
   }
 
   function _gotoTop() {
-    if (_pageNavigationPrev === true) {
-      var pageIndex = NavigationMatrix.getPageIndex();
-      _gotoPage(pageIndex.section, 0);
+    if (_B_CordNavigationPrev === true) {
+      var B_CordIndex = NavigationMatrix.getB_CordIndex();
+      _gotoB_Cord(B_CordIndex.A_Cord, 0);
     }
   }
 
   function _gotoBottom() {
-    if (_pageNavigationNext === true) {
-      var pageIndex = NavigationMatrix.getPageIndex();
-      _gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
+    if (_B_CordNavigationNext === true) {
+      var B_CordIndex = NavigationMatrix.getB_CordIndex();
+      _gotoB_Cord(B_CordIndex.A_Cord, NavigationMatrix.getB_Cords(B_CordIndex.A_Cord).length - 1);
     }
   }
 
@@ -2385,8 +2385,8 @@ var Flowtime = (function ()
     navigateTo();
   }
 
-  function _setBackFromPageToTop(v) {
-    _backFromPageToTop = v === true ? true : false;
+  function _setBackFromB_CordToTop(v) {
+    _backFromB_CordToTop = v === true ? true : false;
   }
 
   function _setNearestToTop(v) {
@@ -2429,12 +2429,12 @@ var Flowtime = (function ()
     _parallaxInPx = v === true ? true : false;
   }
 
-  function _getSectionIndex() {
-    return NavigationMatrix.getPageIndex().section;
+  function _getA_CordIndex() {
+    return NavigationMatrix.getB_CordIndex().A_Cord;
   }
 
-  function _getPageIndex() {
-    return NavigationMatrix.getPageIndex().page;
+  function _getB_CordIndex() {
+    return NavigationMatrix.getB_CordIndex().B_Cord;
   }
 
   function _loop(v) {
@@ -2459,24 +2459,24 @@ var Flowtime = (function ()
     _isTouchActive = touch === false ? true : false;
   }
 
-  function _enableSectionNavigation(prev, next) {
-    _sectionNavigationPrev = prev === false ? false : true;
-    _sectionNavigationNext = next === false ? false : true;
+  function _enableA_CordNavigation(prev, next) {
+    _A_CordNavigationPrev = prev === false ? false : true;
+    _A_CordNavigationNext = next === false ? false : true;
   }
 
-  function _disableSectionNavigation(prev, next) {
-    _sectionNavigationPrev = prev === false ? true : false;
-    _sectionNavigationNext = next === false ? true : false;
+  function _disableA_CordNavigation(prev, next) {
+    _A_CordNavigationPrev = prev === false ? true : false;
+    _A_CordNavigationNext = next === false ? true : false;
   }
 
-  function _enablePageNavigation(prev, next) {
-    _pageNavigationPrev = prev === false ? false : true;
-    _pageNavigationNext = next === false ? false : true;
+  function _enableB_CordNavigation(prev, next) {
+    _B_CordNavigationPrev = prev === false ? false : true;
+    _B_CordNavigationNext = next === false ? false : true;
   }
 
-  function _disablePageNavigation(prev, next) {
-    _pageNavigationPrev = prev === false ? true : false;
-    _pageNavigationNext = next === false ? true : false;
+  function _disableB_CordNavigation(prev, next) {
+    _B_CordNavigationPrev = prev === false ? true : false;
+    _B_CordNavigationNext = next === false ? true : false;
   }
 
   function _setLinksNavigation(v) {
@@ -2516,13 +2516,13 @@ var Flowtime = (function ()
     }
   }
 
-  function _setScrollTheSection(v) {
-    if (_scrollTheSection !== v) {
-      _scrollTheSection = v === true ? true : false;
-      if (!Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS) && _scrollTheSection === true) {
-        Brav1Toolbox.addClass(ftContainer, SCROLL_THE_SECTION_CLASS);
-      } else if (Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS) && _scrollTheSection !== true) {
-        Brav1Toolbox.removeClass(ftContainer, SCROLL_THE_SECTION_CLASS);
+  function _setScrollTheA_Cord(v) {
+    if (_scrollTheA_Cord !== v) {
+      _scrollTheA_Cord = v === true ? true : false;
+      if (!Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_A_CORD_CLASS) && _scrollTheA_Cord === true) {
+        Brav1Toolbox.addClass(ftContainer, SCROLL_THE_A_CORD_CLASS);
+      } else if (Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_A_CORD_CLASS) && _scrollTheA_Cord !== true) {
+        Brav1Toolbox.removeClass(ftContainer, SCROLL_THE_A_CORD_CLASS);
       }
       //
       NavigationMatrix.updateOffsets();
@@ -2551,16 +2551,16 @@ var Flowtime = (function ()
     _navigationCallback = f;
   }
 
-  function _setRememberSectionsStatus(v) {
-    _rememberSectionsStatus = v === true ? true : false;
+  function _setRememberA_CordsStatus(v) {
+    _rememberA_CordsStatus = v === true ? true : false;
   }
 
-  function _setRememberSectionsLastPage(v) {
-    _rememberSectionsLastPage = v === true ? true : false;
+  function _setRememberA_CordsLastB_Cord(v) {
+    _rememberA_CordsLastB_Cord = v === true ? true : false;
   }
 
-  function _setToSectionsFromPages(v) {
-    _toSectionsFromPages = v === false ? false : true;
+  function _setToA_CordsFromB_Cords(v) {
+    _toA_CordsFromB_Cords = v === false ? false : true;
   }
 
   /**
@@ -2570,13 +2570,13 @@ var Flowtime = (function ()
     start                    : _start,
     updateNavigation         : _updateNavigation,
 
-    nextSection              : _nextSection,
-    prevSection              : _prevSection,
-    next                     : _nextPage,
-    prev                     : _prevPage,
-    nextFragment             : _nextPage,
-    prevFragment             : _prevPage,
-    gotoPage                 : _gotoPage,
+    nextA_Cord              : _nextA_Cord,
+    prevA_Cord              : _prevA_Cord,
+    next                     : _nextB_Cord,
+    prev                     : _prevB_Cord,
+    nextFragment             : _nextB_Cord,
+    prevFragment             : _prevB_Cord,
+    gotoB_Cord                 : _gotoB_Cord,
     gotoHome                 : _gotoHome,
     gotoTop                  : _gotoTop,
     gotoBottom               : _gotoBottom,
@@ -2597,14 +2597,14 @@ var Flowtime = (function ()
     addEventListener         : _addEventListener,
     getDefaultProgress       : _getDefaultProgress,
 
-    getSection               : NavigationMatrix.getCurrentSection,
-    getPage                  : NavigationMatrix.getCurrentPage,
-    getSectionIndex          : _getSectionIndex,
-    getPageIndex             : _getPageIndex,
-    getPrevSection           : NavigationMatrix.getPrevSectionObject,
-    getNextSection           : NavigationMatrix.getNextSectionObject,
-    getPrevPage              : NavigationMatrix.getPrevPageObject,
-    getNextPage              : NavigationMatrix.getNextPageObject,
+    getA_Cord               : NavigationMatrix.getCurrentA_Cord,
+    getB_Cord                  : NavigationMatrix.getCurrentB_Cord,
+    getA_CordIndex          : _getA_CordIndex,
+    getB_CordIndex             : _getB_CordIndex,
+    getPrevA_Cord           : NavigationMatrix.getPrevA_CordObject,
+    getNextA_Cord           : NavigationMatrix.getNextA_CordObject,
+    getPrevB_Cord              : NavigationMatrix.getPrevB_CordObject,
+    getNextB_Cord              : NavigationMatrix.getNextB_CordObject,
     autoplay                 : _autoplay,
     play                     : _play,
     pause                    : _pause,
@@ -2614,10 +2614,10 @@ var Flowtime = (function ()
     mouseDragEnabled         : _setMouseDrag,
     enableNavigation         : _enableNavigation,
     disableNavigation        : _disableNavigation,
-    enableSectionNavigation  : _enableSectionNavigation,
-    disableSectionNavigation : _disableSectionNavigation,
-    enablePageNavigation     : _enablePageNavigation,
-    disablePageNavigation    : _disablePageNavigation,
+    enableA_CordNavigation  : _enableA_CordNavigation,
+    disableA_CordNavigation : _disableA_CordNavigation,
+    enableB_CordNavigation     : _enableB_CordNavigation,
+    disableB_CordNavigation    : _disableB_CordNavigation,
     setLinksNavigation       : _setLinksNavigation,
     setKeyboardNavigation    : _setKeyboardNavigation,
     setScrollNavigation      : _setScrollNavigation,
@@ -2630,13 +2630,13 @@ var Flowtime = (function ()
     onNavigation             : _setNavigationCallback,
 
     gridNavigation           : _setGridNavigation,
-    backFromPageToTop        : _setBackFromPageToTop,
-    nearestPageToTop         : _setNearestToTop,
-    rememberSectionsStatus   : _setRememberSectionsStatus,
-    rememberSectionsLastPage : _setRememberSectionsLastPage,
+    backFromB_CordToTop        : _setBackFromB_CordToTop,
+    nearestB_CordToTop         : _setNearestToTop,
+    rememberA_CordsStatus   : _setRememberA_CordsStatus,
+    rememberA_CordsLastB_Cord : _setRememberA_CordsLastB_Cord,
 
-    scrollTheSection         : _setScrollTheSection,
-    toSectionsFromPages      : _setToSectionsFromPages
+    scrollTheA_Cord         : _setScrollTheA_Cord,
+    toA_CordsFromB_Cords      : _setToA_CordsFromB_Cords
   };
 
 })();
