@@ -1,10 +1,8 @@
 ![Flowtime.js](https://github.com/tfer/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-## What this branch is for
+## What this branche is for
 
-* myExamples -- sandbox to explore/augment Marco's included examples
-
-
+* 2D_generalized -- rewrite ft-section & ft-page to ft-A and Ft-B -- a step towards extending to more dimensions
 
 ### Design thoughts
 
