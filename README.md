@@ -2,9 +2,9 @@
 
 ## What the branches in this repo are intended for
 
-master -- this pulls from marcolagos master, meant to be kept in sync with it, its only changes are to allow this readme
-myExamples -- sandbox to explore/augment Marco's included examples
-2D_generalized -- rewrite ft-section & ft-page to ft-A and Ft-B -- a step towards extending to more dimensions
+* master -- this pulls from marcolagos master, meant to be kept in sync with it, its only changes are to allow this readme
+* myExamples -- sandbox to explore/augment Marco's included examples
+* 2D_generalized -- rewrite ft-section & ft-page to ft-A and Ft-B -- a step towards extending to more dimensions
 
 ## An aside on the way I currently create the html for each 'slideshow'.  
 
