@@ -1,5 +1,11 @@
 ![Flowtime.js](https://github.com/tfer/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
+## What the branches in this repo are intended for
+
+master -- this pulls from marcolagos master, meant to be kept in sync with it, its only changes are to allow this readme
+myExamples -- sandbox to explore/augment Marco's included examples
+2D_generalized -- rewrite ft-section & ft-page to ft-A and Ft-B -- a step towards extending to more dimensions
+
 ## An aside on the way I currently create the html for each 'slideshow'.  
 
 I leave a pair of \<main\> -- \</main> tags in the html file that has the flowtime framework and configuration settings that the slideshow will need.  Those tags provide a place to paste the html that will create the slides and their content.  Doing this lets me develop that content separately in a workflow that I find easier than just writting everything out in one go using pure html.
@@ -57,10 +63,16 @@ Well the conference is coming up again and I'm thinking of resubmitting the talk
 
 As time is short before PyOhio 2016, and not knowing the code I and what changes I'll want to make, I think it's best to ignore the form of the Progress Indicator for now and just create the slides I'll need for the presentation, making new slideshows every time I need to desend into levels below the top Part/Chapter slideshow.  
 
+### Well I guess I've got more time to work on this as my talk was rejected for this year's PyOhio
+
+Maybe I'll submit it to PyCon as that is coming to Cleveland, (where I'm at) for the next two years!  Anyway, I need this for my own study plans so I'll keep plugging away at is.
+
 ### Design thoughts
 
-1. go to a dotted-numbers format to 'fix' i.e. 'locate' or 'label', each slide
-1. provide a separate data structure of what to take each level of the dotted-numbers-format as representing, e.g. the "Part - Chapter - Section - page" mentioned above
+1. go to a slash_separted-numbers format to 'fix' i.e. 'locate' or 'label', each slide
+  * use ft-A, ft-B, ft-C, ... as div classes to support instead of 2D ft-section, ft-page
+1. provide a separate data structure of what to take each level of the slash_separted-numbers as representing, e.g. the "Part - Chapter - Section - page" mentioned above
+  * this seems the way to go as flowtime parses the section/page divs to form the computed dom that actually provides the presentation
 1. have a way to work on the presentation-html separtely from the flowtime-html
   * at the moment all the div's that comprise the presentation-html are lumped in with other things in the 'body'
   * as a first step, enclosing them in \<main\> \</main\> works and does not seem to effect the current behavior
