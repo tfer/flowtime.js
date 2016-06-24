@@ -1,6 +1,6 @@
 ![Flowtime.js](https://github.com/tfer/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-## What this branche is for
+## What this branch is for
 
 * 2D_generalized -- rewrite ft-section & ft-page to ft-A and Ft-B -- a step towards extending to more dimensions
 
