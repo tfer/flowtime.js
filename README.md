@@ -21,3 +21,21 @@
   * The book's TOC can be massaged into an input file to aid in generating the slides
  1. may need to use a js graph library, DAG's, (Directed Acyclic Graphs) would be the most natural data structure, for that you'd need linked lists
  1. as this could get quite large, it might be best to make this out of a set of interlinked 2D grid presentations
+
+
+#### For 3D version
+
+1. pair off the `ft-<letter>'s` e.g. ft-A x ft-B, ft-C x ft-D, ...
+1. so there would be one 'AxB' area rendered, and each of those grids that had topics that
+extended into CxD would have there own CxD section on the 'Master page'
+1. so there would be one ft-AxB-absolute-nav classed element, then several `ft/A<x>/B<y>-CxD-absolute-nav` classed elements
+where `<x> and <y>` would be numeric constants where subtopics exist for those elements
+
+
+### Glossary notes
+|Term      | Def |
+|----------|--------------------------------------------------------------------------|
+|grid-slide| A page reachable via the presentation grid e.g. one of the 'blocks' in the presentation grid|
+|hash| the 'place-anchor' portion of the url|
+
+
