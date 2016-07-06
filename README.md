@@ -12,7 +12,7 @@
   * this seems the way to go as flowtime parses the section/page divs to form the computed dom that actually provides the presentation
 1. have a way to work on the presentation-html separtely from the flowtime-html
   * at the moment all the div's that comprise the presentation-html are lumped in with other things in the 'body'
-  * as a first step, enclosing them in \<main\> \</main\> works and does not seem to effect the current behavior
+  * as a first step, enclosing them in `<main> </main>` works and does not seem to effect the current behavior
   * none of the ways I've found to import html into html have worked for me yet
   * even if I don't find a way to do the above, I still want to work with presentation-html separately, even if I have to copy/paste it in
   * "separate" will allow me to generate the presentation-html from other documents, (at least generate the slides and their titles)

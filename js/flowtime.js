@@ -177,21 +177,21 @@ var Flowtime = (function ()
 */
 
   /**
-   * NavigationMatrix is the Object who store the navigation grid structure
+   * NavigationMatrix is the Object who stores the navigation grid structure
    * and which expose all the methods to get and set the navigation destinations
    */
 
   var NavigationMatrix = (function() {
     var A_Cords;                                             // HTML Collection of .flowtime > .ft-A elements
-    var A_CordsArray;                                        // multi-dimensional array containing the B_Cords' array
-    var allB_Cords;                                             // HTML Collection of .flowtime .ft-B elements
+    var A_CordsArray;                                        // multi-dimensional array containing for each column, (an A), a B_Cords' arrays
+    var allB_Cords;                                             // HTML Collection of .flowtime .ft-B elements, (the rows)
     var fragments;                                            // HTML Collection of .fragment elements
     var fragmentsArray;                                       // multi-dimensional array containing the per B_Cord fragments' array
     var fr = [];                                              // multi-dimensional array containing the index of the current active fragment per B_Cord
     var parallaxElements = [];                                // array containing all elements with parrallax
-    var A_CordsLength = 0;                                   // cached total number of .ft-A elements
-    var B_CordsLength = 0;                                      // cached max number of .B_Cord elements
-    var B_CordsTotalLength = 0;                                 // cached total number of .B_Cord elements
+    var A_CordsLength = 0;                                   // cached total number of .ft-A elements, i.e. the number of columns needed
+    var B_CordsLength = 0;                                   // cached max number of .B_Cord elements, i.e. the number of rows needed
+    var B_CordsTotalLength = 0;                                 // cached total number of .B_Cord elements, ?number of slides?
     var p = 0;                                                // index of the current A_Cord viewved or higlighted
     var sp = 0;                                               // index of the current B_Cord viewved or higlighted
     var pCache = 0;                                           // cache index of the current A_Cord
@@ -275,7 +275,7 @@ var Flowtime = (function ()
     }
 
     /**
-     * stores parallax data directly on the dome elements with a data-parallax attribute
+     * stores parallax data directly on the dom elements with a data-parallax attribute
      * data are stored on a multi dimensional array ordered per A_Cord and per B_Cord to easily manage the position
      */
     function setParallax(B_Cord, A_CordIndex, B_CordIndex) {
@@ -313,13 +313,13 @@ var Flowtime = (function ()
     }
 
     /*
-##     ## ########  ########     ###    ######## ########  #######  ######## ########  ######  ######## ########  ######  
-##     ## ##     ## ##     ##   ## ##      ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
-##     ## ##     ## ##     ##  ##   ##     ##    ##       ##     ## ##       ##       ##       ##          ##    ##       
-##     ## ########  ##     ## ##     ##    ##    ######   ##     ## ######   ######    ######  ######      ##     ######  
-##     ## ##        ##     ## #########    ##    ##       ##     ## ##       ##             ## ##          ##          ## 
-##     ## ##        ##     ## ##     ##    ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
- #######  ##        ########  ##     ##    ##    ########  #######  ##       ##        ######  ########    ##     ######  
+          ##     ## ########  ########     ###    ######## ########  #######  ######## ########  ######  ######## ########  ######  
+          ##     ## ##     ## ##     ##   ## ##      ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
+          ##     ## ##     ## ##     ##  ##   ##     ##    ##       ##     ## ##       ##       ##       ##          ##    ##       
+          ##     ## ########  ##     ## ##     ##    ##    ######   ##     ## ######   ######    ######  ######      ##     ######  
+          ##     ## ##        ##     ## #########    ##    ##       ##     ## ##       ##             ## ##          ##          ## 
+          ##     ## ##        ##     ## ##     ##    ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
+          #######  ##        ########  ##     ##    ##    ########  #######  ##       ##        ######  ########    ##     ######  
     */
 
     /**
