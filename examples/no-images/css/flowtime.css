@@ -131,12 +131,12 @@
 
 /* JAVASCRIPT NAVIGATION HOOKS */
 
-  .ft-absolute-nav {
+  .ft-AxB-absolute-nav {
     overflow: hidden;
   }
 
 
-  .ft-absolute-nav .flowtime {
+  .ft-AxB-absolute-nav .flowtime {
     position: absolute;
   }
 

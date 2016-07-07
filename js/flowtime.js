@@ -154,12 +154,12 @@ var Flowtime = (function ()
   }
 
   /**
-   * add "ft-absolute-nav" hook class to body
+   * add "ft-AxB-absolute-nav" hook class to body
    * to set the CSS properties
    * needed for application scrolling
    */
   if (browserSupport) {
-    Brav1Toolbox.addClass(ftParent, "ft-absolute-nav");
+    Brav1Toolbox.addClass(ftParent, "ft-AxB-absolute-nav");
   }
 
   window.onload = function() {
