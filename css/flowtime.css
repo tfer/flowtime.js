@@ -6,9 +6,6 @@
     -webkit-text-size-adjust:none;
   }
 
-  body {
-  }
-
   .flowtime {
     font-size: 0;       /* removes the white spaces between inline-block elements */
                 /* WARNING! this technique does non remove the white-space in Safari for Windows */
