@@ -256,3 +256,11 @@
     -webkit-transform: translateZ(0) !important;
             transform: translateZ(0) !important;
   }
+
+  /* trf: rules specific to this example */
+
+    /* trf: make the "titles"-links seen on every slide disappears when in overview mode */
+  .ft-overview .titles {
+    opacity: 0;
+    pointer-events: none;
+  }
