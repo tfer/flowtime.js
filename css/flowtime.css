@@ -256,7 +256,7 @@
 
   /* trf: rules specific to this example */
 
-    /* trf: make the "titles"-links seen on every slide disappears when in overview mode */
+    /* trf: make the "titles"-links seen over-laying every slide disappear when in overview mode */
   .ft-overview .titles {
     opacity: 0;
     pointer-events: none;
